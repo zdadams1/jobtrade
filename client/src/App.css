@@ -1,0 +1,104 @@
+img {
+  width: 100%;
+}
+
+body {
+  background-color: #0c0c0c;
+  z-index: 0;
+  color: #5cb85c;
+  padding-bottom: 5em;
+  text-align: center;
+}
+
+.App {
+  margin-top: 12vh;
+  z-index: 1;
+}
+
+.app-footer {
+  height: 3.5em;
+}
+
+.footer-menu {
+  list-style-type: none;
+  text-align: center;
+  padding-left: 25em;
+  padding-right: 25em;
+}
+
+.footer-menu li {
+  display: inline-block;
+  padding-left: 0;
+  margin-top: _-1em;
+  text-align: center;
+  padding-right: 4em;
+  margin-right: 3.5em;
+}
+
+.request-list li {
+  background-color: #5cb85c;
+}
+
+@media (min-width: 0em) {
+  .footer-menu {
+    list-style-type: none;
+    text-align: center;
+    padding-left: 0em;
+    padding-right: 0em;
+  }
+  .footer-menu li {
+    display: inline-block;
+    padding-left: 0;
+    text-align: center;
+    padding-right: 0.7em;
+    color: white;
+    margin-left: -0.3em;
+  }
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #006400;
+    color: white;
+    text-align: center;
+    height: 3em;
+    font-size: 0.9em;
+  }
+}
+
+.landing {
+  position: relative;
+  background: url("./img/group-landing.jpg") no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  margin-top: -85px;
+  margin-bottom: -100px;
+}
+
+.landing-inner {
+  padding-top: 80px;
+}
+
+.dark-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.card-form {
+  opacity: 0.9;
+}
+
+.latest-profiles-img {
+  width: 40px;
+  height: 40px;
+}
+
+.form-control::placeholder {
+  color: #bbb !important;
+}
