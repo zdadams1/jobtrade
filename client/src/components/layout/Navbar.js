@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
 import { clearCurrentProfile } from "../../actions/profileActions";
+import defaultImage from "../../img/default-pic.jpg";
 
 class Navbar extends Component {
   onLogoutClick(e) {
@@ -14,6 +15,15 @@ class Navbar extends Component {
 
   render() {
     const { isAuthenticated, user } = this.props.auth;
+    const { profile } = this.props;
+
+    let image;
+
+    if (profile.image === null || profile.image === undefined) {
+      image = defaultImage;
+    } else {
+      image = profile.image;
+    }
 
     const authLinks = (
       <ul className="navbar-nav ml-auto">
@@ -21,8 +31,7 @@ class Navbar extends Component {
           <Link className="nav-link" to="/settings">
             <img
               className="rounded-circle"
-              src={user.image}
-              alt={user.name}
+              src={image}
               style={{ width: "25px", marginRight: "5px" }}
             />
           </Link>
@@ -33,36 +42,21 @@ class Navbar extends Component {
     const guestLinks = (
       <ul className="navbar-nav ml-auto">
         <li className="nav-item">
-          <Link className="nav-link" to="/register">
-            Sign Up
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/login">
-            Login
+          <Link className="nav-link" to="/business">
+            List your Business
           </Link>
         </li>
       </ul>
     );
 
     return (
-      <nav className="navbar navbar-expand-sm navbar-dark bg-success fixed-top mb-4">
+      <nav className="navbar  navbar-dark bg-success fixed-top mb-4">
         <div className="container">
           <Link className="navbar-brand" to="/">
             Group
           </Link>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#mobile-nav"
-          >
-            <span className="navbar-toggler-icon" />
-          </button>
 
-          <div className="collapse navbar-collapse" id="mobile-nav">
-            {isAuthenticated ? authLinks : guestLinks}
-          </div>
+          <div className="">{isAuthenticated ? authLinks : guestLinks}</div>
         </div>
       </nav>
     );
@@ -70,15 +64,16 @@ class Navbar extends Component {
 }
 
 Navbar.propTypes = {
-  logoutUser: PropTypes.func.isRequired,
+  profile: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  profile: state.profile
 });
 
 export default connect(
   mapStateToProps,
-  { logoutUser, clearCurrentProfile }
+  { clearCurrentProfile }
 )(Navbar);

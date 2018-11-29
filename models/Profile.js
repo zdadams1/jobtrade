@@ -35,7 +35,18 @@ const ProfileSchema = new Schema({
   ],
   requests: [
     {
+      request: {
+        type: Schema.Types.ObjectId,
+        ref: "requests"
+      },
+      groupId: {
+        type: Schema.Types.ObjectId,
+        ref: "groups"
+      },
       message: {
+        type: String
+      },
+      handle: {
         type: String
       },
       user: {
@@ -47,31 +58,13 @@ const ProfileSchema = new Schema({
       },
       requestValue: {
         type: String
-      },
-      comments: [
-        {
-          user: {
-            type: Schema.Types.ObjectId,
-            ref: "users"
-          },
-          message: {
-            type: String,
-            required: true
-          },
-          username: {
-            type: String
-          },
-          image: {
-            type: String
-          },
-          date: {
-            type: Date,
-            default: Date.now
-          }
-        }
-      ]
+      }
     }
   ],
+  date: {
+    type: Date,
+    default: Date.now
+  },
   groups: [
     {
       group: {

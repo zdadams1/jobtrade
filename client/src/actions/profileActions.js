@@ -50,6 +50,19 @@ export const getProfileByHandle = handle => dispatch => {
     );
 };
 
+// Get groups for user
+export const getCurrentUserGroups = () => dispatch => {
+  axios
+    .get("/api/profile/groups")
+    .then(res => res.data)
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
 // Get request by id
 export const getRequest = request_id => dispatch => {
   console.log("get");
@@ -70,25 +83,6 @@ export const getRequest = request_id => dispatch => {
     );
 };
 
-// Add Comment
-export const addComment = (requestId, commentData) => dispatch => {
-  dispatch(clearErrors());
-  axios
-    .post(`/api/profile/requests/comment/${requestId}`, commentData)
-    .then(res =>
-      dispatch({
-        type: GET_REQUEST,
-        payload: res.data
-      })
-    )
-    .catch(err =>
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      })
-    );
-};
-
 // Create Profile
 export const createProfile = (profileData, history) => dispatch => {
   axios
@@ -105,32 +99,6 @@ export const createProfile = (profileData, history) => dispatch => {
 export const addOptions = (optData, history) => dispatch => {
   axios
     .post("/api/profile/options", optData)
-    .then(res => history.push("/search"))
-    .catch(err =>
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      })
-    );
-};
-
-export const createInviteMessage = (reqData, history) => dispatch => {
-  console.log(`profile action ${reqData.message}`);
-  axios
-
-    .post(`/api/profile/handle/${reqData.handle}/requests`, reqData)
-    .then(res => history.push("/search"))
-    .catch(err =>
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      })
-    );
-};
-
-export const createRequestMessage = (reqData, history) => dispatch => {
-  axios
-    .post(`/api/profile/handle/${reqData.handle}/requests`, reqData)
     .then(res => history.push("/search"))
     .catch(err =>
       dispatch({

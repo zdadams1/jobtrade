@@ -78,7 +78,7 @@ class CreateProfile extends Component {
                   name="image"
                   type="file"
                   onChange={this.onImageChange}
-                  // value={this.state.image}
+                  value={this.state.image}
                   error={errors.image}
                   info="Upload a nice pic of you"
                 />

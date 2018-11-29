@@ -48,7 +48,7 @@ export const addToGroup = (groupId, userId) => dispatch => {
 export const getGroups = user_id => dispatch => {
   dispatch(setGroupLoading());
   axios
-    .get(`/api/groups/${user_id}`)
+    .get(`/api/profile/groups/${user_id}`)
     .then(res =>
       dispatch({
         type: GET_GROUPS,

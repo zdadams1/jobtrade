@@ -27,6 +27,7 @@ class Group extends Component {
           <GroupItem group={group} showActions={false} />
           <CommentForm groupId={group._id} />
           <CommentFeed groupId={group._id} comments={group.comments} />
+          <div className="group-content" />
         </div>
       );
     }
@@ -35,12 +36,7 @@ class Group extends Component {
       <div className="post">
         <div className="container">
           <div className="row">
-            <div className="col-md-12">
-              <Link to="/groups" className="btn btn-light mb-3">
-                Back
-              </Link>
-              {groupContent}
-            </div>
+            <div className="col-md-12">{groupContent}</div>
           </div>
         </div>
       </div>

@@ -13,15 +13,18 @@ class GroupItem extends Component {
     const { group, auth, showActions } = this.props;
 
     return (
-      <div className="card card-body mb-3">
+      <div className="card card-body red-bkd mb-3">
         <div className="row">
-          <div className="col-md-2">
+          <div className="col-md-12">
             <h3>{group.groupname}</h3>
           </div>
-          <div className="col-md-10">
+          <div className="col-md-12">
             {showActions ? (
               <span>
-                <Link to={`/groups/${group._id}`} className="btn btn-info mr-1">
+                <Link
+                  to={`/groups/${group._id}`}
+                  className="btn btn-success mr-1"
+                >
                   Chat
                 </Link>
                 {group.user === auth.user.id ? (

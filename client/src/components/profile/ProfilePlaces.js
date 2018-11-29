@@ -7,9 +7,9 @@ class ProfilePlaces extends Component {
     return (
       <div className="row">
         <div className="col-md-12">
-          <div className="card card-body bg-danger mb-3">
-            <h3 className="text-center text-white">
-              Here are the places I want to go
+          <div className="card card-body red-bkd mb-3">
+            <h3 className="text-center text-white profile-header">
+              Places and/or Activities i'm interested in
             </h3>
             {profile.options[0].places}
           </div>

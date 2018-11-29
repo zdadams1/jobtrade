@@ -12,8 +12,10 @@ class ProfileAbout extends Component {
     return (
       <div className="row">
         <div className="col-md-12">
-          <div className="card card-body bg-danger mb-3">
-            <h3 className="text-center text-white">Something cool about me</h3>
+          <div className="card card-body red-bkd mb-3">
+            <h3 className="text-center text-white profile-header">
+              Something cool about me
+            </h3>
             <p className="lead">
               {isEmpty(profile.thing) ? (
                 <span>

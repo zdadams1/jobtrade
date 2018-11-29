@@ -12,7 +12,7 @@ class Landing extends Component {
     this.props.getCurrentProfile();
   }
   render() {
-    const { profile, options } = this.props.profile;
+    const { profile } = this.props.profile;
 
     let landingPageContent;
 
@@ -24,9 +24,12 @@ class Landing extends Component {
               <div className="row">
                 <div className="col-md-12 text-center">
                   <h1 className="display-3 mb-4">Group</h1>
-                  <p className="lead"> Find people with common interests</p>
+                  <p className="lead">
+                    {" "}
+                    Find people with common interests, no strings attached.
+                  </p>
                   <hr />
-                  <Link to="/register" className="btn btn-lg btn-info mr-2">
+                  <Link to="/register" className="btn btn-lg btn-success mr-2">
                     Sign Up
                   </Link>
                   <Link to="/login" className="btn btn-lg btn-light">
@@ -39,35 +42,30 @@ class Landing extends Component {
         </div>
       );
     } else {
-      if (this.props.auth.isAuthenticated) {
-        if (options === null) {
-          this.props.history.push("/add-options");
-        } else {
-          this.props.history.push("/search");
-        }
-      } else {
-        landingPageContent = (
-          <div className="landing">
-            <div className="dark-overlay landing-inner text-light">
-              <div className="container">
-                <div className="row">
-                  <div className="col-md-12 text-center">
-                    <h1 className="display-3 mb-4">Group</h1>
-                    <p className="lead"> Find people with common interests</p>
-                    <hr />
-                    <Link to="/register" className="btn btn-lg btn-info mr-2">
-                      Sign Up
-                    </Link>
-                    <Link to="/login" className="btn btn-lg btn-light">
-                      Login
-                    </Link>
-                  </div>
+      landingPageContent = (
+        <div className="landing">
+          <div className="dark-overlay landing-inner text-light">
+            <div className="container">
+              <div className="row">
+                <div className="col-md-12 text-center">
+                  <h1 className="display-3 mb-4">Group</h1>
+                  <p className="lead">
+                    {" "}
+                    Find people with common interests, no strings attached.
+                  </p>
+                  <hr />
+                  <Link to="/register" className="btn btn-lg btn-success mr-2">
+                    Sign Up
+                  </Link>
+                  <Link to="/login" className="btn btn-lg btn-light">
+                    Login
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
-        );
-      }
+        </div>
+      );
     }
     return <div>{landingPageContent}</div>;
   }
@@ -76,8 +74,7 @@ class Landing extends Component {
 Landing.propTypes = {
   getCurrentProfile: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
-  profile: PropTypes.object.isRequired,
-  options: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({

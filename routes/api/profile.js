@@ -106,39 +106,15 @@ router.get("/handle/:handle", (req, res) => {
     .catch(err => res.status(404).json(err));
 });
 
-// @route GET api/profile/handle/:handle/requests
 router.get(
-  "/requests",
-  passport.authenticate("jwt", { session: true }),
-  (req, res) => {
-    const errors = {};
-    Profile.findOne({ user: req.user.id })
-      .then(profile => {
-        res.json(profile.requests);
-      })
-      .catch(err => res.status(404).json(err));
-  }
-);
-
-// @route GET api/profile/requests/:request_id
-router.get(
-  "/requests/:request_id",
+  "/groups",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    console.log("request id route hit");
-    const errors = {};
-
-    Profile.findOne({ user: req.user.id })
-
-      .then(profile => {
-        const request = profile.requests.find(request => {
-          if (request._id == req.params.request_id) {
-            return request;
-          }
-        });
-        res.json(request);
-      })
-      .catch(err => console.log(err));
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      const groups = profile.groups;
+      console.log(groups);
+      res.json(groups);
+    });
   }
 );
 
@@ -251,94 +227,6 @@ router.post(
         profile.save().then(profile => res.json(profile));
       }
     });
-  }
-);
-
-// @route POST api/profile/handle/:handle/requests
-// @desc create group request to user by handle
-router.post(
-  "/handle/:handle/requests",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    console.log("post hit", req.body);
-
-    // const { errors, isValid } = validateRequestInput(req.body);
-
-    // Check Validation
-    // if (!isValid) {
-    //   console.log(errors);
-    //   // Return any errors with 400 status
-    //   return res.status(400).json(errors);
-    // }
-
-    Profile.findOne({ handle: req.params.handle }).then(profile => {
-      console.log("profile found", req.user.id, req.body, req.params.handle);
-      const newReq = {
-        message: req.body.message,
-        username: req.user.name,
-        user: req.user.id,
-        requestValue: req.body.requestvalue
-      };
-      console.log(newReq);
-      profile.requests.unshift(newReq);
-      profile.save().then(profile => res.json(profile));
-    });
-  }
-);
-
-// @route POST api/profile/requests/:request_id
-router.post(
-  "/requests/comment/:request_id",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    console.log("post comment");
-    // const { errors, isValid } = validateRequestInput(req.body);
-
-    // // Check Validation
-    // if (!isValid) {
-    //   // If any errors, send 400 with errors object
-    //   return res.status(400).json(errors);
-    // }
-
-    Profile.findOne({ user: req.user.id }).then(profile => {
-      const newComment = {
-        message: req.body.message,
-        username: req.user.name
-      };
-
-      const request = profile.requests.find(request => {
-        if (request._id == req.params.request_id) {
-          request.comments.unshift(newComment);
-          return request;
-        }
-      });
-      res.json(request);
-    });
-  }
-);
-
-// @route DELETE api/profile/requests/:request_id
-router.delete(
-  "/requests/:request_id",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    console.log("delete route hit", req.params.request_id);
-    Profile.findOne({ user: req.user.id })
-      .then(profile => {
-        // Get remove index
-        const removeIndex = profile.requests
-          .map(item => item._id.toString())
-          .indexOf(req.params.request_id);
-        console.log(removeIndex);
-
-        // Splice out of array
-        profile.requests.splice(removeIndex, 1);
-
-        // Save
-        profile.save().then(profile => res.json(profile));
-        console.log("Success!");
-      })
-      .catch(err => res.status(404).json(err));
   }
 );
 

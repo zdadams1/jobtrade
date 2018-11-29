@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
-import { addComment } from "../../actions/profileActions";
+import { addComment } from "../../actions/requestActions";
 
 class CommentForm extends Component {
   constructor(props) {
@@ -26,11 +26,13 @@ class CommentForm extends Component {
     e.preventDefault();
 
     const { user } = this.props.auth;
-    const { requestId } = this.props;
+    const { requestId, placeholder, request } = this.props;
 
     const commentData = {
       message: this.state.message,
-      requestId: requestId
+      requestId: requestId,
+      handle: request.handle,
+      username: user.name
     };
 
     this.props.addComment(commentData.requestId, commentData);
@@ -46,19 +48,19 @@ class CommentForm extends Component {
 
     return (
       <div className="post-form mb-3">
-        <div className="card card-info">
+        <div className="card card-info request-comment-form red-bkd fixed-bottom pb-5">
           <div className="card-body">
             <form onSubmit={this.onSubmit}>
               <div className="form-group">
                 <TextAreaFieldGroup
-                  placeholder="Reply to request"
+                  placeholder={this.props.placeholder}
                   name="message"
                   value={this.state.message}
                   onChange={this.onChange}
                   error={errors.text}
                 />
               </div>
-              <button type="submit" className="btn btn-dark">
+              <button type="submit" className="btn btn-success">
                 Submit
               </button>
             </form>

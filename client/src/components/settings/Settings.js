@@ -38,18 +38,24 @@ class Settings extends Component {
             </p>
             <ProfileActions />
             <div style={{ marginBottom: "60px" }} />
-            <button
-              onClick={this.onLogoutClick.bind(this)}
-              className="btn btn-warning"
-            >
-              Logout
-            </button>
-            <button
-              onClick={this.onDeleteClick.bind(this)}
-              className="btn btn-danger"
-            >
-              Delete My Account
-            </button>
+            <ul className="settings-buttons">
+              <li>
+                <button
+                  onClick={this.onLogoutClick.bind(this)}
+                  className="btn btn-warning"
+                >
+                  Logout
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={this.onDeleteClick.bind(this)}
+                  className="btn btn-danger"
+                >
+                  Delete My Account
+                </button>
+              </li>
+            </ul>
           </div>
         );
       } else {
@@ -58,9 +64,21 @@ class Settings extends Component {
           <div>
             <p className="lead text-muted">Welcome {user.name}</p>
             <p>You have not yet setup a profile, please add some info</p>
-            <Link to="/create-profile" className="btn btn-lg btn-info">
-              Create Profile
-            </Link>
+            <ul className="settings-buttons">
+              <li>
+                <Link to="/create-profile" className="btn btn-lg btn-success">
+                  Create Profile
+                </Link>
+              </li>
+              <li>
+                <button
+                  onClick={this.onLogoutClick.bind(this)}
+                  className="btn btn-warning"
+                >
+                  Logout
+                </button>
+              </li>
+            </ul>
           </div>
         );
       }
@@ -70,8 +88,8 @@ class Settings extends Component {
       <div className="dashboard">
         <div className="container">
           <div className="row">
-            <div className="col-md-12">
-              <h1 className="display-4">Dashboard</h1>
+            <div className="col-md-12 settings">
+              <h1 className="settings-header">Dashboard</h1>
               {dashboardContent}
             </div>
           </div>

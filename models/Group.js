@@ -6,7 +6,14 @@ const GroupSchema = new Schema({
     type: String,
     required: true
   },
-  users: [String],
+  users: [
+    {
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: "users"
+      }
+    }
+  ],
   comments: [
     {
       user: {

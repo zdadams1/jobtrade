@@ -4,10 +4,10 @@ const isEmpty = require("./is-empty");
 module.exports = function validateGroupInput(data) {
   let errors = {};
 
-  data.message = !isEmpty(data.message) ? data.message : "";
+  data.groupname = !isEmpty(data.groupname) ? data.groupname : "";
 
-  if (Validator.isEmpty(data.message)) {
-    errors.message = "Message field is required";
+  if (Validator.isEmpty(data.groupname)) {
+    errors.groupname = "Group name field is required";
   }
 
   return {

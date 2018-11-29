@@ -15,6 +15,10 @@ body {
   z-index: 1;
 }
 
+.blank {
+  color: #0c0c0c;
+}
+
 .app-footer {
   height: 3.5em;
 }
@@ -31,31 +35,33 @@ body {
   padding-left: 0;
   margin-top: _-1em;
   text-align: center;
-  padding-right: 4em;
-  margin-right: 3.5em;
+  color: white;
+  margin-right: 0.5em;
+  margin-left: 0.5em;
 }
 
 .request-list li {
   background-color: #5cb85c;
 }
 
-@media (min-width: 0em) {
+@media (min-width: 0px) {
   .footer-menu {
     list-style-type: none;
     text-align: center;
     padding-left: 0em;
     padding-right: 0em;
+    display: inline-block;
   }
   .footer-menu li {
     display: inline-block;
     padding-left: 0;
     text-align: center;
-    padding-right: 0.7em;
+
     color: white;
-    margin-left: -0.3em;
   }
   .footer {
     position: fixed;
+    display: inline-block;
     bottom: 0;
     left: 0;
     right: 0;
@@ -64,6 +70,12 @@ body {
     text-align: center;
     height: 3em;
     font-size: 0.9em;
+  }
+}
+
+@media (max-width: 500px) {
+  .footer-menu li {
+    font-size: 1em;
   }
 }
 
@@ -77,8 +89,203 @@ body {
   margin-bottom: -100px;
 }
 
+.settings {
+  padding-top: 15vh;
+}
+
+.settings-buttons {
+  display: inline-block;
+  list-style-type: none;
+  margin-right: 2.7em;
+}
+
+.settings-buttons li {
+  padding-bottom: 2em;
+}
+
+@media (max-width: 800px) {
+  .settings-header {
+    font-size: 1.5em;
+  }
+}
+
+.option-header {
+  font-size: 2.31em;
+}
+
+.category-options {
+  list-style-type: none;
+  display: inline-block;
+  text-align: left;
+  margin-top: 2em;
+}
+
+/* .category-options li p span {
+  padding-right: 2em;
+} */
+
+.category-options li label {
+  font-size: 1.5em;
+}
+
+.category-options li label input {
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  height: 4em;
+  width: 8em;
+  background-color: #eee;
+  margin-right: 1em;
+  padding-right: 1em;
+}
+
+/* On mouse-over, add a grey background color */
+.category-options li label:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.category-options li label input:checked ~ .checkmark {
+  background-color: #5cb85c;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.category-options li label input:checked ~ .checkmark:after {
+  display: block;
+}
+
+@media (max-width: 800px) {
+  .category-options li label {
+    font-size: 1em;
+  }
+  .option-header {
+    font-size: 1.3em;
+    margin-top: 1em;
+  }
+  .category-options {
+    margin-top: 1em;
+  }
+  .place-info-header {
+    font-size: 0.6em;
+    margin-top: -1em;
+  }
+}
+
+.search-header {
+  font-size: 2.5em;
+}
+
+.search-header-item {
+  display: inline-block;
+}
+
+.search-item img {
+  width: 16em;
+  height: 21em;
+}
+
+.search-item {
+  background-color: #800000;
+  margin-left: 10em;
+  margin-right: 10em;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+@media (max-width: 800px) {
+  .search-header {
+    font-size: 1.1em;
+  }
+  .search-item img {
+    width: 7em;
+    height: 10em;
+  }
+
+  .search-item {
+    margin-left: 1em;
+    margin-right: 1em;
+    justify-content: center;
+    margin-bottom: 0.5em;
+  }
+}
+
+@media (min-width: 800px) {
+  .search-item {
+    margin-left: 1em;
+    margin-right: 1em;
+  }
+}
+
+@media (min-width: 900px) {
+  .search-item {
+    margin-left: 2em;
+    margin-right: 2em;
+  }
+}
+
+.profile {
+  background-color: #800000;
+  border-radius: 10px;
+}
+
+.profile img {
+  width: 15em;
+  height: 20em;
+}
+
+.profile button {
+  width: 15em;
+  padding-top: 2em;
+}
+
+.input-group {
+  padding-right: 10em;
+  padding-left: 10em;
+}
+
+@media (max-width: 800px) {
+  .input-group {
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+  }
+  .profile img {
+    width: 10em;
+    height: 13em;
+  }
+  .profile-header {
+    font-size: 1em;
+  }
+}
+
+.group-comment-form {
+  margin-right: 13.27em;
+  margin-left: 13.27em;
+}
+
+@media (max-width: 800px) {
+  .group-comment-form {
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
+
+.red-bkd {
+  background-color: #800000;
+}
+
 .landing-inner {
-  padding-top: 80px;
+  padding-top: 32vh;
 }
 
 .dark-overlay {
@@ -101,4 +308,33 @@ body {
 
 .form-control::placeholder {
   color: #bbb !important;
+}
+
+@media (max-width: 800px) {
+  .request-action-header {
+    font-size: 1em;
+  }
+  .request-action {
+    padding-bottom: 10em;
+  }
+}
+
+.group-content {
+  margin-bottom: 10em;
+}
+
+.request-comment-form {
+  margin-right: 13.27em;
+  margin-left: 13.27em;
+}
+
+@media (max-width: 800px) {
+  .request-comment-form {
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
+
+.join-group-btn {
+  margin-bottom: 10em;
 }

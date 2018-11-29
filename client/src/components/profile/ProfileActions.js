@@ -4,14 +4,18 @@ import InputGroup from "../common/InputGroup";
 import SelectListGroup from "../common/SelectListGroup";
 
 import {
-  getProfileByHandle,
   createInviteMessage,
-  createRequestMessage,
-  getCurrentProfile
+  createRequestMessage
+} from "../../actions/requestActions";
+import {
+  getProfileByHandle,
+  getCurrentUserGroups
 } from "../../actions/profileActions";
 import { getGroups } from "../../actions/groupActions";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import Spinner from "../common/Spinner";
+import axios from "axios";
 
 class ProfileActions extends Component {
   constructor(props) {
@@ -20,7 +24,8 @@ class ProfileActions extends Component {
       displayInviteForm: false,
       displayRequestForm: false,
       handle: "",
-      group: "",
+      groupId: "",
+      groups: [],
       message: "",
       errors: {}
     };
@@ -39,11 +44,9 @@ class ProfileActions extends Component {
   }
 
   onInviteClick() {
-    const { user } = this.props.auth;
-    const id = user.id;
-    const groups = this.props.getGroups(id);
-
-    console.log(groups);
+    axios.get("/api/profile/groups").then(groups => {
+      this.setState({ groups: groups.data });
+    });
 
     this.setState(prevState => ({
       displayInviteForm: !prevState.displayInviteForm
@@ -60,16 +63,26 @@ class ProfileActions extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
+  onSelectClick = e => {
+    console.log(e.target.value);
+    this.setState({ groupId: e.target.value });
+  };
+
   onInviteSubmit(e) {
     e.preventDefault();
     const { profile } = this.props;
-    console.log(profile);
+    const { user } = this.props.auth;
+    console.log(e);
 
     const reqData = {
       message: this.state.message,
       requestvalue: "invite",
-      groupId: this.state.group,
-      handle: profile.profile.handle
+      groupId: this.state.groupId,
+      handle: profile.profile.handle,
+      user: user.id,
+      sender: user.id,
+      username: user.name,
+      reciever: profile.profile.user._id
     };
 
     this.props.createInviteMessage(reqData, this.props.history);
@@ -78,42 +91,53 @@ class ProfileActions extends Component {
   onRequestSubmit(e) {
     e.preventDefault();
     const { profile } = this.props;
+    const { user } = this.props.auth;
     console.log(profile);
 
     const reqData = {
       message: this.state.message,
       requestvalue: "request",
-      handle: profile.profile.handle
+      handle: profile.profile.handle,
+      user: user.id,
+      sender: user.id,
+      username: user.name,
+      reciever: profile.profile.user._id
     };
+    console.log(reqData.reciever);
 
     this.props.createRequestMessage(reqData, this.props.history);
   }
 
   render() {
-    const { errors, displayInviteForm, displayRequestForm } = this.state;
-    const { groups } = this.props;
+    const {
+      errors,
+      displayInviteForm,
+      displayRequestForm,
+      groups
+    } = this.state;
+    const { loading } = this.props;
+    console.log("state", groups);
 
     let inviteInputs;
     let requestInputs;
 
     if (displayInviteForm) {
-      if (groups === null || groups === undefined) {
-        inviteInputs = <h3>You are not in a group yet.</h3>;
+      if (groups === null || loading || groups.length === 0) {
+        inviteInputs = <Spinner />;
+      }
+      if (groups === undefined) {
+        inviteInputs = <div>You are not in any groups.</div>;
       } else {
-        const options = groups.map(group => {
-          label: `${group.name}`;
-          value: group._id;
-        });
-        const mappedOptions = options.toArray();
         inviteInputs = (
           <div>
             <form onSubmit={this.onInviteSubmit}>
               <SelectListGroup
                 placeholder="Select group to add to"
                 name="groupId"
-                value={this.state.group}
-                options={mappedOptions}
+                value={this.state.groupId}
+                options={groups}
                 onChange={this.onChange}
+                onClick={this.onSelectClick}
               />
               <InputGroup
                 placeholder="Hey, want to join my group?"
@@ -125,7 +149,7 @@ class ProfileActions extends Component {
               <input
                 type="submit"
                 value="Submit"
-                className="btn btn-success btn-block mt-4"
+                className="btn btn-success mt-4"
               />
             </form>
           </div>
@@ -147,7 +171,7 @@ class ProfileActions extends Component {
             <input
               type="submit"
               value="Submit"
-              className="btn btn-success btn-block mt-4"
+              className="btn btn-success mt-4n mb-4 mx-10"
             />
           </form>
         </div>
@@ -159,7 +183,7 @@ class ProfileActions extends Component {
         <hr />
         <button
           type="button"
-          className="btn btn-success btn-block"
+          className="btn btn-success"
           onClick={this.onInviteClick}
         >
           <h3 className="mb-4">Invite</h3>
@@ -168,7 +192,7 @@ class ProfileActions extends Component {
         <hr />
         <button
           type="button"
-          className="btn btn-success btn-block"
+          className="btn btn-success mb-4"
           onClick={this.onRequestClick}
         >
           <h3 className="mb-4">Request</h3>
@@ -181,7 +205,7 @@ class ProfileActions extends Component {
 
 ProfileActions.propTypes = {
   getProfileByHandle: PropTypes.func.isRequired,
-  getGroups: PropTypes.func.isRequired,
+  getCurrentUserGroups: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
@@ -189,6 +213,7 @@ ProfileActions.propTypes = {
 
 const mapStateToProps = state => ({
   profile: state.profile,
+
   auth: state.auth,
   errors: state.errors
 });
@@ -199,6 +224,6 @@ export default connect(
     createInviteMessage,
     createRequestMessage,
     getProfileByHandle,
-    getGroups
+    getCurrentUserGroups
   }
 )(withRouter(ProfileActions));

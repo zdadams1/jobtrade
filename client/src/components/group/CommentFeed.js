@@ -6,9 +6,11 @@ class CommentFeed extends Component {
   render() {
     const { comments, groupId } = this.props;
 
-    return comments.map(comment => (
-      <CommentItem key={comment._id} comment={comment} groupId={groupId} />
-    ));
+    return comments
+      .map(comment => (
+        <CommentItem key={comment._id} comment={comment} groupId={groupId} />
+      ))
+      .reverse();
   }
 }
 

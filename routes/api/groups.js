@@ -3,22 +3,27 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const passport = require("passport");
 
-// Post model
+// Group model
 const Group = require("../../models/Group");
 // Profile model
 const Profile = require("../../models/Profile");
 
 // Validation
 const validateGroupInput = require("../../validation/group");
+const validateMessageInput = require("../../validation/message");
 
 // @route   GET api/groups/:user_id
 // @desc    Get user groups
-// @access  Public
-router.get("/:group_id", (req, res) => {
-  Group.findById({ _id: req.params.group_id })
-    .then(group => res.json(group))
-    .catch(err => res.status(404).json({ nogroupfound: "No groups found" }));
-});
+// @access  Private
+router.get(
+  "/:group_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Group.findById({ _id: req.params.group_id })
+      .then(group => res.json(group))
+      .catch(err => res.status(404).json({ nogroupfound: "No groups found" }));
+  }
+);
 
 // @route   POST api/groups
 // @desc    Create group
@@ -100,7 +105,7 @@ router.post(
   "/comment/:group_id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    const { errors, isValid } = validateGroupInput(req.body);
+    const { errors, isValid } = validateMessageInput(req.body);
 
     // Check Validation
     if (!isValid) {
@@ -110,9 +115,10 @@ router.post(
 
     Group.findById({ _id: req.params.group_id })
       .then(group => {
+        console.log("group found!");
         const newComment = {
           message: req.body.message,
-          name: req.body.name,
+          username: req.body.username,
           user: req.user.id
         };
 
@@ -157,6 +163,39 @@ router.delete(
         group.save().then(group => res.json(group));
       })
       .catch(err => res.status(404).json({ groupnotfound: "No group found" }));
+  }
+);
+
+// Create leave group route
+
+// @route DELETE api/groups/:group_id
+router.delete(
+  "/:group_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    console.log("delete route hit", req.params.request_id);
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      // Get remove index
+      const removeIndex = profile.requests
+        .map(item => item._id.toString())
+        .indexOf(req.params.request_id);
+      console.log(removeIndex);
+
+      // Splice out of array
+      profile.requests.splice(removeIndex, 1);
+
+      // Save
+      profile.save();
+    });
+    Group.findById(req.params.group_id)
+      .then(group => {
+        // Delete
+        group.remove().then(() => res.json({ success: true }));
+      })
+
+      .catch(err =>
+        res.status(404).json({ requestnotfound: "No request found" })
+      );
   }
 );
 

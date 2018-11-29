@@ -14,18 +14,19 @@ class Search extends Component {
 
   render() {
     const { profiles, loading, profile } = this.props.profile;
+    const { user } = this.props.auth;
     let profileItems;
     let profileItem;
 
-    if (profile === null || loading) {
-      profileItem = <Spinner />;
+    if (profile === null || loading || Object.keys(profile).length === 0) {
+      profileItem = <div className="blank">blank</div>;
     } else {
       if (
         profile.options === null ||
         loading ||
         profile.options === undefined
       ) {
-        profileItem = <Spinner />;
+        profileItem = <div className="blank">blank</div>;
       } else {
         profileItem = (
           <SearchCategory value={profile.options[0].category} profile={profile}>
@@ -43,7 +44,10 @@ class Search extends Component {
         profileItems = profiles.map(profile => {
           const otherUserCategory = profile.options[0].category;
           if (userCategory === otherUserCategory) {
-            return <SearchItem key={profile._id} profile={profile} />;
+            console.log(profile.user, user);
+            if (profile.user._id !== user.id) {
+              return <SearchItem key={profile._id} profile={profile} />;
+            }
           }
         });
       } else {
@@ -57,8 +61,9 @@ class Search extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <h1 className="display-4 text-center">
-                Find people interested in {profileItem}
+              <h1 className="search-header text-center">
+                Find people interested in{" "}
+                <span className="search-header-item">{profileItem}</span>
               </h1>
               {profileItems}
             </div>

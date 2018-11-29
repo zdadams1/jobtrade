@@ -16,6 +16,7 @@ class GroupActions extends Component {
     };
     this.onChange = this.onChange.bind(this);
     this.onNewGroupRequestSubmit = this.onNewGroupRequestSubmit.bind(this);
+    this.onInviteSubmit = this.onInviteSubmit.bind(this);
   }
   componentDidMount() {
     this.props.getCurrentProfile();
@@ -31,9 +32,24 @@ class GroupActions extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
+  onInviteSubmit(e) {
+    e.preventDefault();
+    const { request } = this.props;
+    const { user } = this.props.auth;
+    console.log(user);
+
+    const invData = {
+      groupId: request.groupId,
+      user: user._id
+    };
+
+    this.props.addToGroup(invData, this.props.history);
+  }
+
   onNewGroupRequestSubmit(e) {
     e.preventDefault();
     const { request } = this.props;
+    console.log(request.user);
 
     const groupData = {
       groupname: this.state.groupname,
@@ -50,7 +66,7 @@ class GroupActions extends Component {
 
     if (request.requestValue === "invite") {
       groupActionContent = (
-        <div>
+        <div className="join-group-btn">
           <form onSubmit={this.onInviteSubmit}>
             <button type="submit" className="btn btn-success">
               Join Group
@@ -65,9 +81,11 @@ class GroupActions extends Component {
       }
       if (profile.groups === undefined) {
         groupActionContent = (
-          <div>
+          <div className=" request-action">
             <form onSubmit={this.onNewGroupRequestSubmit}>
-              <h3>When you're ready, create a group!</h3>
+              <h3 className="request-action-header">
+                When you're ready, create a group!
+              </h3>
               <InputGroup
                 placeholder="Group name"
                 name="groupname"
@@ -104,12 +122,14 @@ GroupActions.propTypes = {
   getCurrentProfile: PropTypes.func.isRequired,
   createGroup: PropTypes.func.isRequired,
   request: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired
+  errors: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   errors: state.errors,
-  profile: state.profile
+  profile: state.profile,
+  auth: state.auth
 });
 
 export default connect(

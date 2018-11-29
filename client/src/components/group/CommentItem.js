@@ -8,7 +8,7 @@ class CommentItem extends Component {
     console.log(comment);
 
     return (
-      <div className="card card-body mb-3">
+      <div className="card card-body red-bkd mb-3">
         <div className="row">
           <div className="col-md-2">
             <p className="text-center">{comment.username}</p>

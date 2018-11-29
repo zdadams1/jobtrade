@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import TextFieldGroup from "../common/TextFieldGroup";
-import SelectListGroup from "../common/SelectListGroup";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { addOptions } from "../../actions/profileActions";
+import { addOptions, getCurrentProfile } from "../../actions/profileActions";
+import axios from "axios";
 
 class AddOptions extends Component {
   constructor(props) {
@@ -18,6 +18,25 @@ class AddOptions extends Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onCheck = this.onCheck.bind(this);
+  }
+
+  componentDidMount() {
+    axios
+      .get("api/profile")
+      .then(profile => {
+        if (profile.status === 200) {
+          return;
+        } else {
+          this.props.history.push("/settings");
+        }
+      })
+      .catch(profile => {
+        if (profile.status !== 200) {
+          this.props.history.push("/settings");
+        } else {
+          return;
+        }
+      });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -38,6 +57,7 @@ class AddOptions extends Component {
   }
 
   onChange(e) {
+    console.log(e.target.value);
     this.setState({ [e.target.name]: e.target.value });
   }
 
@@ -51,40 +71,80 @@ class AddOptions extends Component {
   render() {
     const { errors } = this.state;
 
-    // Select options for status
-    const options = [
-      { label: "* Select Category", value: 0 },
-      { label: "Outdoor Activity", value: "Outdoor" },
-      { label: "Indoor Recreation", value: "Indoor" },
-      { label: "Nightlife", value: "Nightlife" },
-      { label: "Food and Dining", value: "Food" }
-    ];
-
     return (
       <div className="add-experience">
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
-              <h1 className="display-4 text-center">Add Category and Places</h1>
-              <hr />
-              <hr />
-              <hr />
+              <h1 className="option-header text-center">
+                Add Category and Places
+              </h1>
+
               <form onSubmit={this.onSubmit}>
-                <SelectListGroup
-                  placeholder="* Category"
-                  name="category"
-                  value={this.state.category}
-                  onChange={this.onChange}
-                  error={errors.category}
-                  options={options}
-                />
+                <ul className="category-options">
+                  <li>
+                    <label>
+                      <input
+                        type="radio"
+                        name="category"
+                        value="Indoor"
+                        checked={this.state.category === "Indoor"}
+                        onChange={this.onChange}
+                        error={errors.category}
+                      />
+                      <span className="checkmark"> </span>Indoor Recreation
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input
+                        type="radio"
+                        name="category"
+                        value="Outdoor"
+                        checked={this.state.category === "Outdoor"}
+                        onChange={this.onChange}
+                        error={errors.category}
+                      />
+                      <span className="checkmark"> </span> Outdoor Activity
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input
+                        type="radio"
+                        name="category"
+                        value="Food"
+                        checked={this.state.category === "Food"}
+                        onChange={this.onChange}
+                        error={errors.category}
+                      />
+                      <span className="checkmark"> </span>Food and Dining
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      <input
+                        type="radio"
+                        name="category"
+                        value="Nightlife"
+                        checked={this.state.category === "Nightlife"}
+                        onChange={this.onChange}
+                        error={errors.category}
+                      />
+                      <span className="checkmark"> </span>Nightlife
+                    </label>
+                  </li>
+                </ul>
                 <TextFieldGroup
-                  placeholder="Add places that you'd like to go"
+                  placeholder="Hiking, surfing, climbing"
                   name="places"
                   value={this.state.places}
                   onChange={this.onChange}
                   error={errors.places}
                 />
+                <h5 className="place-info-header">
+                  Add Destinations or Activities in a comma separated list
+                </h5>
                 <input
                   type="submit"
                   value="Submit"
@@ -101,16 +161,17 @@ class AddOptions extends Component {
 
 AddOptions.propTypes = {
   addOptions: PropTypes.func.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  profile: state.profile,
-  errors: state.errors
+  errors: state.errors,
+  profile: state.profile
 });
 
 export default connect(
   mapStateToProps,
-  { addOptions }
+  { addOptions, getCurrentProfile }
 )(withRouter(AddOptions));

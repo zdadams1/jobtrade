@@ -30,7 +30,8 @@ class CommentForm extends Component {
 
     const commentData = {
       message: this.state.message,
-      groupId: groupId
+      groupId: groupId,
+      username: user.name
     };
 
     this.props.addComment(commentData.groupId, commentData);
@@ -46,7 +47,7 @@ class CommentForm extends Component {
 
     return (
       <div className="post-form mb-3">
-        <div className="card card-info">
+        <div className="card card-info red-bkd group-comment-form fixed-bottom pb-5">
           <div className="card-body">
             <form onSubmit={this.onSubmit}>
               <div className="form-group">
@@ -58,7 +59,7 @@ class CommentForm extends Component {
                   error={errors.text}
                 />
               </div>
-              <button type="submit" className="btn btn-dark">
+              <button type="submit" className="btn btn-success">
                 Submit
               </button>
             </form>

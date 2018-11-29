@@ -7,7 +7,7 @@ import CommentForm from "./CommentForm";
 import CommentFeed from "./CommentFeed";
 import GroupActions from "./GroupActions";
 import Spinner from "../common/Spinner";
-import { getRequest } from "../../actions/profileActions";
+import { getRequest } from "../../actions/requestActions";
 
 class Request extends Component {
   componentDidMount() {
@@ -16,6 +16,7 @@ class Request extends Component {
 
   render() {
     const { request, loading } = this.props.request;
+    const { user } = this.props.auth;
 
     let requestContent;
 
@@ -27,30 +28,86 @@ class Request extends Component {
     ) {
       requestContent = <Spinner />;
     } else {
-      requestContent = (
-        <div>
-          <RequestItem request={request} showActions={false} />
-          <CommentForm requestId={request._id} />
-          <CommentFeed requestId={request._id} comments={request.comments} />
-          <GroupActions
-            requestId={request._id}
-            request={request}
-            requestValue={request.inviteorrequest}
-          />
-        </div>
-      );
+      if (request.user === user.id && request.requestValue === "request") {
+        requestContent = (
+          <div>
+            <RequestItem request={request} showActions={false} />
+            <CommentForm
+              requestId={request._id}
+              request={request}
+              placeholder="Add comment to your request"
+            />
+            <CommentFeed requestId={request._id} comments={request.comments} />
+            <div className="request-action" />
+          </div>
+        );
+      } else {
+        if (request.user === user.id && request.requestValue === "invite") {
+          requestContent = (
+            <div>
+              <RequestItem request={request} showActions={false} />
+              <CommentForm
+                requestId={request._id}
+                request={request}
+                placeholder="Add comment to your invite"
+              />
+              <CommentFeed
+                requestId={request._id}
+                comments={request.comments}
+              />
+              <div className="request-action" />
+            </div>
+          );
+        }
+        if (request.requestValue === "request" && request.user != user.id) {
+          requestContent = (
+            <div>
+              <RequestItem request={request} showActions={false} />
+              <CommentForm
+                requestId={request._id}
+                placeholder="Reply to request"
+                request={request}
+              />
+              <CommentFeed
+                requestId={request._id}
+                comments={request.comments}
+              />
+              <GroupActions
+                requestId={request._id}
+                request={request}
+                requestValue={request.inviteorrequest}
+              />
+            </div>
+          );
+        }
+        if (request.requestValue === "invite" && request.user != user.id) {
+          requestContent = (
+            <div>
+              <RequestItem request={request} showActions={false} />
+              <CommentForm
+                requestId={request._id}
+                placeholder="Reply to invite"
+                request={request}
+              />
+              <CommentFeed
+                requestId={request._id}
+                comments={request.comments}
+              />
+              <GroupActions
+                requstId={request._id}
+                request={request}
+                requestValue={request.inviteorrequest}
+              />
+            </div>
+          );
+        }
+      }
     }
-
     return (
       <div className="post">
         <div className="container">
           <div className="row">
-            <div className="col-md-12">
-              <Link to="/requests" className="btn btn-light mb-3">
-                Back
-              </Link>
-              {requestContent}
-            </div>
+            <div className="col-md-12">{requestContent}</div>
           </div>
         </div>
       </div>
@@ -60,11 +117,13 @@ class Request extends Component {
 
 Request.propTypes = {
   getRequest: PropTypes.func.isRequired,
-  request: PropTypes.object.isRequired
+  request: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  request: state.request
+  request: state.request,
+  auth: state.auth
 });
 
 export default connect(
