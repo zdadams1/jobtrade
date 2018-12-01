@@ -38,18 +38,17 @@ router.post(
     // Check Validation
     if (!isValid) {
       // If any errors, send 400 with errors object
-      return res.status(400).json(errors);
+      return res.json(errors);
     }
 
-    const users = [];
-    users.push(req.user._id);
-    users.push(req.body.requestee);
-    console.log(users);
+    const user1 = req.user.id;
+    const user2 = req.body.requestee;
 
     const newGroup = new Group({
       groupname: req.body.groupname,
-      users: users
+      users: user1
     });
+    newGroup.users.push(user2);
 
     console.log(newGroup);
 
@@ -68,6 +67,27 @@ router.post(
     });
 
     newGroup.save().then(group => res.json(group));
+  }
+);
+
+router.post(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Group.findOne({ _id: req.params.id }).then(group => {
+      const newUser = req.user._id;
+      group.users.push(newUser);
+      group.save().then(group => res.json(group));
+
+      Profile.findOne({ user: req.user._id }).then(profile => {
+        const newGroup = {
+          _id: group._id,
+          groupname: group.groupname
+        };
+        profile.groups.push(newGroup);
+        profile.save();
+      });
+    });
   }
 );
 

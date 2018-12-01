@@ -24,26 +24,6 @@ export const createGroup = (groupData, history) => dispatch => {
     );
 };
 
-// Add to group
-// takes in groupId and userId
-export const addToGroup = (groupId, userId) => dispatch => {
-  dispatch(setGroupLoading());
-  axios
-    .post(`/api/groups/${groupId}`, userId)
-    .then(res =>
-      dispatch({
-        type: GET_GROUP,
-        payload: res.data
-      })
-    )
-    .catch(err =>
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      })
-    );
-};
-
 // Get all Groups for user
 export const getGroups = user_id => dispatch => {
   dispatch(setGroupLoading());
@@ -111,6 +91,20 @@ export const addComment = (groupId, commentData) => dispatch => {
         payload: res.data
       })
     )
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
+// Add to group
+export const addToGroup = (data, history) => dispatch => {
+  dispatch(clearErrors());
+  axios
+    .post(`/api/groups/${data.groupId}`, data.user)
+    .then(res => history.push("/groups"))
     .catch(err =>
       dispatch({
         type: GET_ERRORS,

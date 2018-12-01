@@ -36,7 +36,7 @@ class GroupActions extends Component {
     e.preventDefault();
     const { request } = this.props;
     const { user } = this.props.auth;
-    console.log(user);
+    console.log(request.groupId);
 
     const invData = {
       groupId: request.groupId,
@@ -84,7 +84,7 @@ class GroupActions extends Component {
           <div className=" request-action">
             <form onSubmit={this.onNewGroupRequestSubmit}>
               <h3 className="request-action-header">
-                When you're ready, create a group!
+                Create a group!
               </h3>
               <InputGroup
                 placeholder="Group name"
@@ -109,6 +109,19 @@ class GroupActions extends Component {
               </button>
             </form>
           </div>
+                        <h3 className="request-action-header">
+                        Create a group!
+                      </h3>
+                      <InputGroup
+                        placeholder="Group name"
+                        name="groupname"
+                        value={this.state.groupname}
+                        onChange={this.onChange}
+                        error={errors.group}
+                      />
+                      <button type="submit" className="btn btn-success">
+                        Create new Group
+                      </button>
         );
       }
     }
