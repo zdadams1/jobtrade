@@ -1,15 +1,17 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import Spinner from "../common/Spinner";
-import SearchItem from "./SearchItem";
-import SearchCategory from "./SearchCategory";
-import { getProfiles, getCurrentProfile } from "../../actions/profileActions";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import Spinner from '../common/Spinner';
+import SearchItem from './SearchItem';
+import SearchCategory from './SearchCategory';
+import { getProfiles, getCurrentProfile } from '../../actions/profileActions';
+import { getJobItemsByLocation } from '../../actions/jobItemActions';
 
 class Search extends Component {
   componentDidMount() {
     this.props.getCurrentProfile();
     this.props.getProfiles();
+    console.log(navigator.geolocation.positionOptions);
   }
 
   render() {
@@ -19,14 +21,14 @@ class Search extends Component {
     let profileItem;
 
     if (profile === null || loading || Object.keys(profile).length === 0) {
-      profileItem = <div className="blank">blank</div>;
+      profileItem = <div className='blank'>blank</div>;
     } else {
       if (
         profile.options === null ||
         loading ||
         profile.options === undefined
       ) {
-        profileItem = <div className="blank">blank</div>;
+        profileItem = <div className='blank'>blank</div>;
       } else {
         profileItem = (
           <SearchCategory value={profile.options[0].category} profile={profile}>
@@ -57,13 +59,13 @@ class Search extends Component {
       }
     }
     return (
-      <div className="profiles">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-12">
-              <h1 className="search-header text-center">
-                Find people interested in{" "}
-                <span className="search-header-item">{profileItem}</span>
+      <div className='profiles'>
+        <div className='container'>
+          <div className='row'>
+            <div className='col-md-12'>
+              <h1 className='search-header text-center'>
+                Find people interested in{' '}
+                <span className='search-header-item'>{profileItem}</span>
               </h1>
               {profileItems}
             </div>

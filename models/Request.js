@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const requestSchema = new Schema({
@@ -17,7 +17,7 @@ const requestSchema = new Schema({
   },
   user: {
     type: Schema.Types.ObjectId,
-    ref: "users"
+    ref: 'users'
   },
   username: {
     type: String
@@ -32,7 +32,7 @@ const requestSchema = new Schema({
     {
       user: {
         type: Schema.Types.ObjectId,
-        ref: "users"
+        ref: 'users'
       },
       message: {
         type: String,
@@ -52,4 +52,4 @@ const requestSchema = new Schema({
   ]
 });
 
-module.exports = Request = mongoose.model("request", requestSchema);
+module.exports = Request = mongoose.model('request', requestSchema);

@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { PropTypes } from "prop-types";
-import { connect } from "react-redux";
-import { getCurrentProfile } from "../../actions/profileActions";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { PropTypes } from 'prop-types';
+import { connect } from 'react-redux';
+import { getCurrentProfile } from '../../actions/profileActions';
 
 class Landing extends Component {
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/add-options");
+      this.props.history.push('/add-options');
     }
     this.props.getCurrentProfile();
   }
@@ -18,21 +18,18 @@ class Landing extends Component {
 
     if (profile === null) {
       landingPageContent = (
-        <div className="landing">
-          <div className="dark-overlay landing-inner text-light">
-            <div className="container">
-              <div className="row">
-                <div className="col-md-12 text-center">
-                  <h1 className="display-3 mb-4">Group</h1>
-                  <p className="lead">
-                    {" "}
-                    Find people with common interests, no strings attached.
-                  </p>
+        <div className='landing'>
+          <div className='dark-overlay landing-inner text-light'>
+            <div className='container'>
+              <div className='row'>
+                <div className='col-md-12 text-center'>
+                  <h2 className='display-4 mb-5'>The JobTrade</h2>
+                  <p className='lead mb-5'> Buy, Sell and Work</p>
                   <hr />
-                  <Link to="/register" className="btn btn-lg btn-success mr-2">
+                  <Link to='/register' className='btn btn-lg btn-danger mr-2'>
                     Sign Up
                   </Link>
-                  <Link to="/login" className="btn btn-lg btn-light">
+                  <Link to='/login' className='btn btn-lg btn-light'>
                     Login
                   </Link>
                 </div>
@@ -43,21 +40,18 @@ class Landing extends Component {
       );
     } else {
       landingPageContent = (
-        <div className="landing">
-          <div className="dark-overlay landing-inner text-light">
-            <div className="container">
-              <div className="row">
-                <div className="col-md-12 text-center">
-                  <h1 className="display-3 mb-4">Group</h1>
-                  <p className="lead">
-                    {" "}
-                    Find people with common interests, no strings attached.
-                  </p>
+        <div className='landing'>
+          <div className='dark-overlay landing-inner text-light'>
+            <div className='container'>
+              <div className='row'>
+                <div className='col-md-12 text-center'>
+                  <h2 className='display-4 mb-5'>The JobTrade</h2>
+                  <p className='lead mb-5'> Buy, Sell and Work</p>
                   <hr />
-                  <Link to="/register" className="btn btn-lg btn-success mr-2">
+                  <Link to='/register' className='btn btn-lg btn-danger mr-2'>
                     Sign Up
                   </Link>
-                  <Link to="/login" className="btn btn-lg btn-light">
+                  <Link to='/login' className='btn btn-lg btn-light'>
                     Login
                   </Link>
                 </div>

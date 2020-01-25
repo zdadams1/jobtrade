@@ -1,21 +1,21 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import InputGroup from "../common/InputGroup";
-import SelectListGroup from "../common/SelectListGroup";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import InputGroup from '../common/InputGroup';
+import SelectListGroup from '../common/SelectListGroup';
 
 import {
   createInviteMessage,
   createRequestMessage
-} from "../../actions/requestActions";
+} from '../../actions/requestActions';
 import {
   getProfileByHandle,
   getCurrentUserGroups
-} from "../../actions/profileActions";
-import { getGroups } from "../../actions/groupActions";
-import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
-import Spinner from "../common/Spinner";
-import axios from "axios";
+} from '../../actions/profileActions';
+import { getJobItems } from '../../actions/jobItemActions';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import Spinner from '../common/Spinner';
+import axios from 'axios';
 
 class ProfileActions extends Component {
   constructor(props) {
@@ -23,10 +23,10 @@ class ProfileActions extends Component {
     this.state = {
       displayInviteForm: false,
       displayRequestForm: false,
-      handle: "",
-      groupId: "",
+      handle: '',
+      groupId: '',
       groups: [],
-      message: "",
+      message: '',
       errors: {}
     };
 
@@ -44,7 +44,7 @@ class ProfileActions extends Component {
   }
 
   onInviteClick() {
-    axios.get("/api/profile/groups").then(groups => {
+    axios.get('/api/profile/groups').then(groups => {
       this.setState({ groups: groups.data });
     });
 
@@ -76,7 +76,7 @@ class ProfileActions extends Component {
 
     const reqData = {
       message: this.state.message,
-      requestvalue: "invite",
+      requestvalue: 'invite',
       groupId: this.state.groupId,
       handle: profile.profile.handle,
       user: user.id,
@@ -96,7 +96,7 @@ class ProfileActions extends Component {
 
     const reqData = {
       message: this.state.message,
-      requestvalue: "request",
+      requestvalue: 'request',
       handle: profile.profile.handle,
       user: user.id,
       sender: user.id,
@@ -116,7 +116,7 @@ class ProfileActions extends Component {
       groups
     } = this.state;
     const { loading } = this.props;
-    console.log("state", groups);
+    console.log('state', groups);
 
     let inviteInputs;
     let requestInputs;
@@ -132,24 +132,24 @@ class ProfileActions extends Component {
           <div>
             <form onSubmit={this.onInviteSubmit}>
               <SelectListGroup
-                placeholder="Select group to add to"
-                name="groupId"
+                placeholder='Select group to add to'
+                name='groupId'
                 value={this.state.groupId}
                 options={groups}
                 onChange={this.onChange}
                 onClick={this.onSelectClick}
               />
               <InputGroup
-                placeholder="Hey, want to join my group?"
-                name="message"
+                placeholder='Hey, want to join my group?'
+                name='message'
                 value={this.state.message}
                 onChange={this.onChange}
               />
 
               <input
-                type="submit"
-                value="Submit"
-                className="btn btn-success mt-4"
+                type='submit'
+                value='Submit'
+                className='btn btn-success mt-4'
               />
             </form>
           </div>
@@ -162,16 +162,16 @@ class ProfileActions extends Component {
         <div>
           <form onSubmit={this.onRequestSubmit}>
             <InputGroup
-              placeholder="Hey, do you have a group I could join, or do you want to start one?"
-              name="message"
+              placeholder='Hey, do you have a group I could join, or do you want to start one?'
+              name='message'
               value={this.state.message}
               onChange={this.onChange}
               error={errors.request}
             />
             <input
-              type="submit"
-              value="Submit"
-              className="btn btn-success mt-4n mb-4 mx-10"
+              type='submit'
+              value='Submit'
+              className='btn btn-success mt-4n mb-4 mx-10'
             />
           </form>
         </div>
@@ -179,23 +179,23 @@ class ProfileActions extends Component {
     }
 
     return (
-      <div ref="myRef">
+      <div ref='myRef'>
         <hr />
         <button
-          type="button"
-          className="btn btn-success"
+          type='button'
+          className='btn btn-success'
           onClick={this.onInviteClick}
         >
-          <h3 className="mb-4">Invite</h3>
+          <h3 className='mb-4'>Invite</h3>
         </button>
         {displayInviteForm ? inviteInputs : null}
         <hr />
         <button
-          type="button"
-          className="btn btn-success mb-4"
+          type='button'
+          className='btn btn-success mb-4'
           onClick={this.onRequestClick}
         >
-          <h3 className="mb-4">Request</h3>
+          <h3 className='mb-4'>Request</h3>
         </button>
         {displayRequestForm ? requestInputs : null}
       </div>

@@ -1,14 +1,14 @@
-import { combineReducers } from "redux";
-import authReducer from "./authReducer";
-import errorReducer from "./errorReducer";
-import profileReducer from "./profileReducer";
-import requestReducer from "./requestReducer";
-import groupReducer from "./groupReducer";
+import { combineReducers } from 'redux';
+import authReducer from './authReducer';
+import errorReducer from './errorReducer';
+import profileReducer from './profileReducer';
+import requestReducer from './requestReducer';
+import jobItemReducer from './jobItemReducer';
 
 export default combineReducers({
   auth: authReducer,
   errors: errorReducer,
   profile: profileReducer,
-  group: groupReducer,
+  jobItem: jobItemReducer,
   request: requestReducer
 });

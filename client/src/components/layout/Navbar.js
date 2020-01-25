@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { logoutUser } from "../../actions/authActions";
-import { clearCurrentProfile } from "../../actions/profileActions";
-import defaultImage from "../../img/default-pic.jpg";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { logoutUser } from '../../actions/authActions';
+import { clearCurrentProfile } from '../../actions/profileActions';
+import defaultImage from '../../img/default-pic.jpg';
 
 class Navbar extends Component {
   onLogoutClick(e) {
@@ -26,13 +26,13 @@ class Navbar extends Component {
     }
 
     const authLinks = (
-      <ul className="navbar-nav ml-auto">
-        <li className="nav-item">
-          <Link className="nav-link" to="/settings">
+      <ul className='navbar-nav ml-auto'>
+        <li className='nav-item'>
+          <Link className='nav-link' to='/settings'>
             <img
-              className="rounded-circle"
+              className='rounded-circle'
               src={image}
-              style={{ width: "25px", marginRight: "5px" }}
+              style={{ width: '25px', marginRight: '5px' }}
             />
           </Link>
         </li>
@@ -40,23 +40,23 @@ class Navbar extends Component {
     );
 
     const guestLinks = (
-      <ul className="navbar-nav ml-auto">
-        <li className="nav-item">
-          <Link className="nav-link" to="/business">
-            List your Business
+      <ul className='navbar-nav ml-auto'>
+        <li className='nav-item'>
+          <Link className='nav-link' to='/business'>
+            About
           </Link>
         </li>
       </ul>
     );
 
     return (
-      <nav className="navbar  navbar-dark bg-success fixed-top mb-4">
-        <div className="container">
-          <Link className="navbar-brand" to="/">
-            Group
+      <nav className='navbar  navbar-dark bg-danger fixed-top mb-4'>
+        <div className='container'>
+          <Link className='navbar-brand' to='/'>
+            JobTrade
           </Link>
 
-          <div className="">{isAuthenticated ? authLinks : guestLinks}</div>
+          <div className=''>{isAuthenticated ? authLinks : guestLinks}</div>
         </div>
       </nav>
     );

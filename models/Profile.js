@@ -1,11 +1,11 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 // Create Schema
 const ProfileSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: "users"
+    ref: 'users'
   },
   handle: {
     type: String,
@@ -20,58 +20,17 @@ const ProfileSchema = new Schema({
       type: String
     }
   ],
-  options: [
-    {
-      category: {
-        type: String,
-        required: true
-      },
-      places: [
-        {
-          type: String
-        }
-      ]
-    }
-  ],
-  requests: [
-    {
-      request: {
-        type: Schema.Types.ObjectId,
-        ref: "requests"
-      },
-      groupId: {
-        type: Schema.Types.ObjectId,
-        ref: "groups"
-      },
-      message: {
-        type: String
-      },
-      handle: {
-        type: String
-      },
-      user: {
-        type: Schema.Types.ObjectId,
-        ref: "users"
-      },
-      username: {
-        type: String
-      },
-      requestValue: {
-        type: String
-      }
-    }
-  ],
   date: {
     type: Date,
     default: Date.now
   },
-  groups: [
+  jobItems: [
     {
-      group: {
+      jobItem: {
         type: Schema.Types.ObjectId,
-        ref: "groups"
+        ref: 'jobItem'
       },
-      groupname: {
+      jobItemName: {
         type: String,
         required: true
       }
@@ -83,4 +42,4 @@ const ProfileSchema = new Schema({
   }
 });
 
-module.exports = Profile = mongoose.model("profile", ProfileSchema);
+module.exports = Profile = mongoose.model('profile', ProfileSchema);

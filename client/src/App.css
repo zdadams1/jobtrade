@@ -81,7 +81,7 @@ body {
 
 .landing {
   position: relative;
-  background: url("./img/group-landing.jpg") no-repeat;
+  background: url('./img/jobtrade-landing.jpg') no-repeat;
   background-size: cover;
   background-position: center;
   height: 100vh;
@@ -155,7 +155,7 @@ body {
 
 /* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {
-  content: "";
+  content: '';
   position: absolute;
   display: none;
 }
