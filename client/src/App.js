@@ -18,10 +18,6 @@ import Login from './components/auth/Login';
 import Settings from './components/settings/Settings';
 import CreateProfile from './components/create-profile/CreateProfile';
 import EditProfile from './components/edit-profile/EditProfile';
-import Requests from './components/requests/Requests';
-import Request from './components/request/Request';
-import JobItems from './components/groups/JobItemItem';
-import JobItem from './components/group/JobItem';
 import Profile from './components/profile/Profile';
 import NotFound from './components/not-found/NotFound';
 
@@ -80,18 +76,6 @@ class App extends Component {
                 />
               </Switch>
 
-              <Switch>
-                <PrivateRoute exact path='/requests' component={Requests} />
-              </Switch>
-              <Switch>
-                <PrivateRoute exact path='/request/:id' component={Request} />
-              </Switch>
-              <Switch>
-                <PrivateRoute exact path='/job-items' component={JobItems} />
-              </Switch>
-              <Switch>
-                <PrivateRoute exact path='/job-items/:id' component={JobItem} />
-              </Switch>
               <Route exact path='/not-found' component={NotFound} />
             </div>
             <Footer />

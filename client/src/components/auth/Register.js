@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import { registerUser } from "../../actions/authActions";
-import TextFieldGroup from "../common/TextFieldGroup";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { registerUser } from '../../actions/authActions';
+import TextFieldGroup from '../common/TextFieldGroup';
 
 class Register extends Component {
   constructor() {
     super();
     this.state = {
-      name: "",
-      email: "",
-      password: "",
-      password2: "",
+      name: '',
+      email: '',
+      password: '',
+      password2: '',
       errors: {}
     };
 
@@ -22,7 +22,7 @@ class Register extends Component {
 
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/settings");
+      this.props.history.push('/settings');
     }
   }
 
@@ -53,49 +53,49 @@ class Register extends Component {
     const { errors } = this.state;
 
     return (
-      <div className="register">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-8 m-auto">
-              <h1 className="display-4 text-center">Sign Up</h1>
-              <p className="lead text-center">Create your Group account</p>
+      <div className='register'>
+        <div className='container'>
+          <div className='row'>
+            <div className='col-md-8 m-auto'>
+              <h1 className='display-4 text-center'>Sign Up</h1>
+              <p className='lead text-center'>Create your JobTrade account</p>
               <hr />
               <hr />
               <form noValidate onSubmit={this.onSubmit}>
                 <TextFieldGroup
-                  placeholder="Name"
-                  name="name"
+                  placeholder='Name'
+                  name='name'
                   value={this.state.name}
                   onChange={this.onChange}
                   error={errors.name}
                 />
                 <TextFieldGroup
-                  placeholder="Email"
-                  name="email"
-                  type="email"
+                  placeholder='Email'
+                  name='email'
+                  type='email'
                   value={this.state.email}
                   onChange={this.onChange}
                   error={errors.email}
                 />
                 <TextFieldGroup
-                  placeholder="Password"
-                  name="password"
-                  type="password"
+                  placeholder='Password'
+                  name='password'
+                  type='password'
                   value={this.state.password}
                   onChange={this.onChange}
                   error={errors.password}
                 />
                 <TextFieldGroup
-                  placeholder="Confirm Password"
-                  name="password2"
-                  type="password"
+                  placeholder='Confirm Password'
+                  name='password2'
+                  type='password'
                   value={this.state.password2}
                   onChange={this.onChange}
                   error={errors.password2}
                 />
                 <input
-                  type="submit"
-                  className="btn btn-success btn-block mt-4"
+                  type='submit'
+                  className='btn btn-danger btn-block mt-4'
                 />
               </form>
             </div>
@@ -117,7 +117,4 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(
-  mapStateToProps,
-  { registerUser }
-)(withRouter(Register));
+export default connect(mapStateToProps, { registerUser })(withRouter(Register));
