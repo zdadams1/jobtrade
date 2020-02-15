@@ -9,9 +9,22 @@ import { getJobItemsByLocation } from '../../actions/jobItemActions';
 
 class Search extends Component {
   componentDidMount() {
-    this.props.getCurrentProfile();
-    this.props.getProfiles();
-    console.log(navigator.geolocation.positionOptions);
+    axios
+      .get('api/profile')
+      .then(profile => {
+        if (profile.status === 200) {
+          return;
+        } else {
+          this.props.history.push('/settings');
+        }
+      })
+      .catch(profile => {
+        if (profile.status !== 200) {
+          this.props.history.push('/settings');
+        } else {
+          return;
+        }
+      });
   }
 
   render() {
@@ -88,7 +101,6 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(
-  mapStateToProps,
-  { getProfiles, getCurrentProfile }
-)(Search);
+export default connect(mapStateToProps, { getProfiles, getCurrentProfile })(
+  Search
+);

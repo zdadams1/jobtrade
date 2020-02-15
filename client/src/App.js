@@ -20,6 +20,10 @@ import CreateProfile from './components/create-profile/CreateProfile';
 import EditProfile from './components/edit-profile/EditProfile';
 import Profile from './components/profile/Profile';
 import NotFound from './components/not-found/NotFound';
+import Chat from './components/chat/Chat.js';
+import AddLocation from './components/location/AddLocation';
+import Market from './components/market/Market.js';
+import Jobs from './components/jobs/Jobs.js';
 
 import './App.css';
 
@@ -46,6 +50,7 @@ if (localStorage.jwtToken) {
 
 class App extends Component {
   render() {
+    const { chat } = this.props;
     return (
       <Provider store={store}>
         <Router>
@@ -71,11 +76,31 @@ class App extends Component {
               <Switch>
                 <PrivateRoute
                   exact
+                  path='/add-location'
+                  component={AddLocation}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
                   path='/edit-profile'
                   component={EditProfile}
                 />
               </Switch>
-
+              <Switch>
+                <Route
+                  exact
+                  path='/chat/:locname'
+                  component={Chat}
+                  chat={chat}
+                />
+              </Switch>
+              <Switch>
+                <Route exact path='/market/:locname' component={Market} />
+              </Switch>
+              <Switch>
+                <Route exact path='/jobs/:locname' component={Jobs} />
+              </Switch>
               <Route exact path='/not-found' component={NotFound} />
             </div>
             <Footer />

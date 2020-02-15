@@ -1,9 +1,9 @@
 import {
   ADD_JOBITEM,
-  GET_JOBITEMS,
-  GET_JOBITEM,
-  DELETE_JOBITEM,
-  JOBITEM_LOADING
+  GET_JOBS,
+  GET_JOB,
+  DELETE_JOB,
+  JOB_LOADING
 } from '../actions/types';
 
 const initialState = {
@@ -14,18 +14,18 @@ const initialState = {
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case JOBITEM_LOADING:
+    case JOB_LOADING:
       return {
         ...state,
         loading: true
       };
-    case GET_JOBITEMS:
+    case GET_JOBS:
       return {
         ...state,
         jobitems: action.payload,
         loading: false
       };
-    case GET_JOBITEM:
+    case GET_JOB:
       return {
         ...state,
         jobitem: action.payload,
@@ -36,7 +36,7 @@ export default function(state = initialState, action) {
         ...state,
         jobitems: [action.payload, ...state.jobitems]
       };
-    case DELETE_JOBITEM:
+    case DELETE_JOB:
       return {
         ...state,
         jobitems: state.jobitems.filter(

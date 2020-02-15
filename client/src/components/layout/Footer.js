@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+//bring in profile, change links to /.../${profile.locname}
+
 class Footer extends Component {
   render() {
     const { isAuthenticated } = this.props.auth;
@@ -15,13 +17,18 @@ class Footer extends Component {
           </Link>
         </li>
         <li>
-          <Link className='text-white' to='/job-items'>
-            Search
+          <Link className='text-white' to='/jobs'>
+            Jobs
           </Link>
         </li>
         <li>
-          <Link className='text-white' to='/requests'>
-            Requests
+          <Link className='text-white' to='/market'>
+            Market
+          </Link>
+        </li>
+        <li>
+          <Link className='text-white' to='/messages'>
+            Messages
           </Link>
         </li>
       </ul>

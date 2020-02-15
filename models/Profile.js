@@ -15,6 +15,9 @@ const ProfileSchema = new Schema({
   thing: {
     type: String
   },
+  locname: {
+    type: String
+  },
   images: [
     {
       type: String
@@ -33,6 +36,38 @@ const ProfileSchema = new Schema({
       jobItemName: {
         type: String,
         required: true
+      }
+    }
+  ],
+  items: [
+    {
+      itemname: {
+        type: String,
+        required: true
+      },
+      category: {
+        type: String,
+        required: true
+      },
+      itemdescription: {
+        type: String,
+        required: true
+      },
+      itemimage: {
+        type: String,
+        required: false
+      },
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: 'users'
+      },
+      itemprice: {
+        type: String,
+        required: true
+      },
+      date: {
+        type: Date,
+        default: Date.now
       }
     }
   ],

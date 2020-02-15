@@ -1,29 +1,39 @@
-import { GET_REQUEST, GET_REQUESTS, REQUEST_LOADING } from "../actions/types";
+import {
+  GET_ITEM,
+  GET_ITEMS,
+  ITEM_LOADING,
+  DELETE_ITEM
+} from '../actions/types';
 
 const initialState = {
-  request: null,
-  requests: null,
+  item: null,
+  items: null,
   loading: false
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case REQUEST_LOADING:
+    case ITEM_LOADING:
       return {
         ...state,
         loading: true
       };
-    case GET_REQUEST:
+    case GET_ITEM:
       return {
         ...state,
-        request: action.payload,
+        item: action.payload,
         loading: false
       };
-    case GET_REQUESTS:
+    case GET_ITEMS:
       return {
         ...state,
         requests: action.payload,
         loading: false
+      };
+    case DELETE_ITEM:
+      return {
+        ...state,
+        items: state.items.filter(item => item._id !== action.payload)
       };
     default:
       return state;

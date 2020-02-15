@@ -8,12 +8,14 @@ const users = require('./routes/api/users');
 const profile = require('./routes/api/profile');
 const requests = require('./routes/api/requests');
 const jobItems = require('./routes/api/jobitems');
-
+const chat = require('./routes/api/chat');
+const item = require('./routes/api/item');
 const app = express();
 const server = http.createServer(app);
 const io = require('socket.io').listen(server);
 const port = process.env.PORT || 5000;
 server.listen(port);
+app.set('socketio', io);
 
 // Body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -28,37 +30,6 @@ mongoose
     if (err) {
       throw err;
     }
-
-    io.on('connection', socket => {
-      let chat = database.collection('chats');
-
-      sendStatus = s => {
-        socket.emit('status', s);
-      };
-
-      chat
-        .find()
-        .limit(100)
-        .sort({ _id: 1 })
-        .toArray((err, res) => {
-          if (err) {
-            throw err;
-          }
-          socket.emit('output', res);
-        });
-
-      socket.on('input', data => {
-        let name = data.name;
-        let message = data.message;
-
-        chat.insert({ name: name, message: message }, () => {
-          io.emit('output', [data]);
-          sendStatus({
-            message: 'Message sent'
-          });
-        });
-      });
-    });
   })
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err));
@@ -74,6 +45,8 @@ app.use('/api/users', users);
 app.use('/api/profile', profile);
 app.use('/api/requests', requests);
 app.use('/api/job-items', jobItems);
+app.use('/api/chat', chat);
+app.use('/api/item', item);
 
 // Server static assets if in production
 if (process.env.NODE_ENV === 'production') {

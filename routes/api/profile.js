@@ -7,6 +7,7 @@ const GridFsStorage = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
 const multer = require('multer');
 const crypto = require('crypto');
+const Chat = require('../../models/Chat');
 
 // const db = require("../../config/keys").mongoURI;
 // // Create storage engine
@@ -130,6 +131,7 @@ router.post(
     profileFields.user = req.user.id;
     if (req.body.handle) profileFields.handle = req.body.handle;
     if (req.body.thing) profileFields.thing = req.body.thing;
+    if (req.body.locname) profileFields.locname = req.body.locname;
     if (req.body.jobItem) profileFields.jobItem = req.body.jobItem;
     if (req.file) profileFields.image = req.file;
 
@@ -143,6 +145,7 @@ router.post(
           console.log(req.file);
         });
         console.log(profileFields.image);
+
         Profile.findOneAndUpdate(
           { user: req.user.id },
           { $set: profileFields },
@@ -159,10 +162,29 @@ router.post(
           }
 
           // Save Profile
-          new Profile(profileFields).save().then(profile => res.json(profile));
+          new Profile(profileFields)
+            .save()
+            .then(profile => res.json(profile))
+            .catch(err => res.json(err));
         });
       }
     });
+  }
+);
+
+// POST api/profile/location
+router.post(
+  '/location',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const locFields = {};
+    if (req.body.locname) locFields.locname = req.body.locname;
+
+    Profile.findOneAndUpdate(
+      { user: req.user.id },
+      { $set: locFields },
+      { new: true }
+    ).then(profile => res.json(profile));
   }
 );
 

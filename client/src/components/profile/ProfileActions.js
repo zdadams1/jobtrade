@@ -4,14 +4,10 @@ import InputGroup from '../common/InputGroup';
 import SelectListGroup from '../common/SelectListGroup';
 
 import {
-  createInviteMessage,
-  createRequestMessage
-} from '../../actions/requestActions';
-import {
   getProfileByHandle,
   getCurrentUserGroups
 } from '../../actions/profileActions';
-import { getJobItems } from '../../actions/jobItemActions';
+// import { getJobItems } from '../../actions/jobActions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Spinner from '../common/Spinner';
@@ -218,12 +214,7 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    createInviteMessage,
-    createRequestMessage,
-    getProfileByHandle,
-    getCurrentUserGroups
-  }
-)(withRouter(ProfileActions));
+export default connect(mapStateToProps, {
+  getProfileByHandle,
+  getCurrentUserGroups
+})(withRouter(ProfileActions));

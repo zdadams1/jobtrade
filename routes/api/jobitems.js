@@ -11,14 +11,14 @@ const Profile = require('../../models/Profile');
 // Validation
 const validateJobItemInput = require('../../validation/jobitem');
 
-// @route   GET api/job-items/:user_id
-// @desc    Get user job items
+// @route   GET api/job-items/:locname
+// @desc    Get job items
 // @access  Private
 router.get(
-  '/:user_id',
+  '/:locname',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    User.findById({ _id: req.params.user_id })
+    JobItem.findAll({ locname: req.params.locname })
       .then(jobItems => res.json(jobItems))
       .catch(err => res.status(404).json({ nojobitemsfound: 'None found' }));
   }

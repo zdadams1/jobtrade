@@ -4,15 +4,16 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
 
-import { createProfile } from '../../actions/profileActions';
+import { createJob } from '../../actions/jobActions';
 
-class CreateProfile extends Component {
+class NewJobForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      handle: '',
-      thing: '',
-      image: '',
+      jobname: '',
+      jobcategory: '',
+      jobimage: '',
+      jobdescription: '',
       errors: {}
     };
 
@@ -29,13 +30,14 @@ class CreateProfile extends Component {
   onSubmit(e) {
     e.preventDefault();
 
-    const profileData = {
-      handle: this.state.handle,
-      thing: this.state.thing,
-      image: this.state.image
+    const jobData = {
+      jobname: this.state.jobname,
+      jobcategory: this.state.jobcategory,
+      jobimage: this.state.jobimage,
+      jobdescription: this.state.jobdescription
     };
 
-    this.props.createProfile(profileData, this.props.history);
+    this.props.createJob(jobData, this.props.history);
   }
 
   onChange(e) {
@@ -58,29 +60,36 @@ class CreateProfile extends Component {
               <small className='d-block pb-3'>* = required fields</small>
               <form onSubmit={this.onSubmit}>
                 <TextFieldGroup
-                  placeholder='* Profile Handle'
-                  name='handle'
-                  value={this.state.handle}
+                  placeholder='* Name'
+                  name='jobname'
+                  value={this.state.jobname}
                   onChange={this.onChange}
-                  error={errors.handle}
-                  info='A unique handle for your profile.'
+                  error={errors.name}
+                  info='Name.'
                 />
                 <TextFieldGroup
-                  placeholder='Thing'
-                  name='thing'
-                  value={this.state.thing}
+                  placeholder='category'
+                  name='jobcategory'
                   onChange={this.onChange}
-                  error={errors.thing}
-                  info='Enter a cool thing about you.'
+                  value={this.state.jobcategory}
+                  error={errors.category}
+                  info='Pick a category'
                 />
                 <TextFieldGroup
-                  placeholder='Nice pic of you'
-                  name='image'
-                  type='file'
-                  onChange={this.onImageChange}
-                  value={this.state.image}
+                  placeholder='image'
+                  name='jobimage'
+                  value={this.state.jobimage}
+                  onChange={this.onChange}
                   error={errors.image}
-                  info='Upload a nice pic of you'
+                  info='Upload a picture.'
+                />
+                <TextFieldGroup
+                  placeholder='description'
+                  name='jobdescription'
+                  onChange={this.onChange}
+                  value={this.state.jobdescription}
+                  error={errors.description}
+                  info='Describe '
                 />
 
                 <input
@@ -97,16 +106,12 @@ class CreateProfile extends Component {
   }
 }
 
-CreateProfile.propTypes = {
-  profile: PropTypes.object.isRequired,
+NewJobForm.propTypes = {
   errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  profile: state.profile,
   errors: state.errors
 });
 
-export default connect(mapStateToProps, { createProfile })(
-  withRouter(CreateProfile)
-);
+export default connect(mapStateToProps, { createJob })(withRouter(NewJobForm));

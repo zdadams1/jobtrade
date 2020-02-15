@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 import {
   GET_PROFILE,
@@ -9,14 +9,15 @@ import {
   GET_ERRORS,
   SET_CURRENT_USER,
   GET_REQUEST,
-  REQUEST_LOADING
-} from "./types";
+  REQUEST_LOADING,
+  GET_CHAT
+} from './types';
 
 // Get current profile
 export const getCurrentProfile = () => dispatch => {
   dispatch(setProfileLoading());
   axios
-    .get("/api/profile")
+    .get('/api/profile')
     .then(res =>
       dispatch({
         type: GET_PROFILE,
@@ -53,7 +54,7 @@ export const getProfileByHandle = handle => dispatch => {
 // Get groups for user
 export const getCurrentUserGroups = () => dispatch => {
   axios
-    .get("/api/profile/groups")
+    .get('/api/profile/groups')
     .then(res => res.data)
     .catch(err =>
       dispatch({
@@ -65,7 +66,7 @@ export const getCurrentUserGroups = () => dispatch => {
 
 // Get request by id
 export const getRequest = request_id => dispatch => {
-  console.log("get");
+  console.log('get');
   dispatch(setRequestLoading());
   axios
     .get(`/api/profile/requests/${request_id}`)
@@ -86,8 +87,8 @@ export const getRequest = request_id => dispatch => {
 // Create Profile
 export const createProfile = (profileData, history) => dispatch => {
   axios
-    .post("/api/profile", profileData)
-    .then(res => history.push("/add-options"))
+    .post('/api/profile', profileData)
+    .then(res => history.push('/add-location'))
     .catch(err =>
       dispatch({
         type: GET_ERRORS,
@@ -96,16 +97,12 @@ export const createProfile = (profileData, history) => dispatch => {
     );
 };
 
-export const addOptions = (optData, history) => dispatch => {
+export const addLocation = (locData, history) => dispatch => {
   axios
-    .post("/api/profile/options", optData)
-    .then(res => history.push("/search"))
-    .catch(err =>
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      })
-    );
+    .post(`/api/profile/location`, locData)
+    .then(res => history.push(`/chat/${locData.locname}`))
+
+    .catch(err => console.log(err));
 };
 
 // Delete Options
@@ -148,7 +145,7 @@ export const deleteRequest = id => dispatch => {
 export const getProfiles = () => dispatch => {
   dispatch(setProfileLoading());
   axios
-    .get("/api/profile/search")
+    .get('/api/profile/search')
     .then(res =>
       dispatch({
         type: GET_PROFILES,
@@ -165,9 +162,9 @@ export const getProfiles = () => dispatch => {
 
 // Delete account & profile
 export const deleteAccount = () => dispatch => {
-  if (window.confirm("Are you sure? This can NOT be undone!")) {
+  if (window.confirm('Are you sure? This can NOT be undone!')) {
     axios
-      .delete("/api/profile")
+      .delete('/api/profile')
       .then(res =>
         dispatch({
           type: SET_CURRENT_USER,

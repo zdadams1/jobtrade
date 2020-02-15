@@ -19,13 +19,13 @@ class Login extends Component {
 
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push('/search');
+      this.props.history.push('/chat');
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
-      this.props.history.push('/search');
+      this.props.history.push('/chat');
     }
 
     if (nextProps.errors) {
