@@ -3,18 +3,18 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
-
+import { getCurrentProfile } from '../../actions/profileActions';
 import { createJob } from '../../actions/jobActions';
 
 class NewJobForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      jobname: '',
-      jobcategory: '',
-      jobimage: '',
-      jobdescription: '',
-      errors: {}
+      jobitemname: '',
+      jobitemcategory: '',
+      jobitemimage: '',
+      jobitemdescription: '',
+      errors: {},
     };
 
     this.onChange = this.onChange.bind(this);
@@ -29,12 +29,14 @@ class NewJobForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+    const { profile } = this.props.profile;
 
     const jobData = {
-      jobname: this.state.jobname,
-      jobcategory: this.state.jobcategory,
-      jobimage: this.state.jobimage,
-      jobdescription: this.state.jobdescription
+      jobitemname: this.state.jobitemname,
+      jobitemcategory: this.state.jobitemcategory,
+      jobitemimage: this.state.jobitemimage,
+      jobitemdescription: this.state.jobitemdescription,
+      locname: profile.locname,
     };
 
     this.props.createJob(jobData, this.props.history);
@@ -44,7 +46,7 @@ class NewJobForm extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
-  onImageChange = e => {
+  onImageChange = (e) => {
     this.setState({ image: e.target.files[0] });
   };
 
@@ -56,38 +58,38 @@ class NewJobForm extends Component {
         <div className='container'>
           <div className='row'>
             <div className='col-md-8 m-auto'>
-              <h1 className='display-4 text-center'>Create Your Profile</h1>
+              <h1 className='display-4 text-center'>Create a job</h1>
               <small className='d-block pb-3'>* = required fields</small>
               <form onSubmit={this.onSubmit}>
                 <TextFieldGroup
                   placeholder='* Name'
-                  name='jobname'
-                  value={this.state.jobname}
+                  name='jobitemname'
+                  value={this.state.jobitemname}
                   onChange={this.onChange}
                   error={errors.name}
                   info='Name.'
                 />
                 <TextFieldGroup
                   placeholder='category'
-                  name='jobcategory'
+                  name='jobitemcategory'
                   onChange={this.onChange}
-                  value={this.state.jobcategory}
+                  value={this.state.jobitemcategory}
                   error={errors.category}
                   info='Pick a category'
                 />
                 <TextFieldGroup
                   placeholder='image'
-                  name='jobimage'
-                  value={this.state.jobimage}
+                  name='jobitemimage'
+                  value={this.state.jobitemimage}
                   onChange={this.onChange}
                   error={errors.image}
                   info='Upload a picture.'
                 />
                 <TextFieldGroup
                   placeholder='description'
-                  name='jobdescription'
+                  name='jobitemdescription'
                   onChange={this.onChange}
-                  value={this.state.jobdescription}
+                  value={this.state.jobitemdescription}
                   error={errors.description}
                   info='Describe '
                 />
@@ -107,11 +109,15 @@ class NewJobForm extends Component {
 }
 
 NewJobForm.propTypes = {
-  errors: PropTypes.object.isRequired
+  errors: PropTypes.object.isRequired,
+  profile: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
-  errors: state.errors
+const mapStateToProps = (state) => ({
+  errors: state.errors,
+  profile: state.profile,
 });
 
-export default connect(mapStateToProps, { createJob })(withRouter(NewJobForm));
+export default connect(mapStateToProps, { createJob, getCurrentProfile })(
+  withRouter(NewJobForm)
+);

@@ -14,54 +14,101 @@ const validateItemInput = require('../../validation/item');
 // @route   GET api/items/:user_id
 // @desc    Get user items
 // @access  Private
-router.get(
-  '/:user_id',
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    User.findById({ _id: req.params.user_id })
-      .then(Items => res.json(Items))
-      .catch(err => res.status(404).json({ noitemsfound: 'None found' }));
-  }
-);
+// router.get(
+//   '/:user_id',
+//   passport.authenticate('jwt', { session: false }),
+//   (req, res) => {
+//     User.findById({ _id: req.params.user_id })
+//       .then(Items => res.json(Items))
+//       .catch(err => res.status(404).json({ noitemsfound: 'None found' }));
+//   }
+// );
 
-// @route   POST api/items
-// @desc    Create Item
+// @route GET api/item/:locname
+router.get('/:locname', (req, res) => {
+  console.log('hit', req.params.locname);
+  const corrected = req.params.locname.replace(' ', '%20');
+  Item.findOne({ locname: corrected })
+    .then((item) => res.json(item))
+    .catch((err) => console.log(err));
+});
+
+// @route   POST api/chat
+// @desc    Add to area chat
 // @access  Private
 router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
+  // upload.single("file"),
   (req, res) => {
-    console.log('post route hit');
-    const { errors, isValid } = validateItemInput(req.body);
-
+    const { errors, isValid } = validateLocationInput(req.body);
+    console.log('route hit');
     // Check Validation
     if (!isValid) {
-      // If any errors, send 400 with errors object
-      return res.json(errors);
+      // Return any errors with 400 status
+      console.log(errors);
+      return res.status(400).json(errors);
     }
 
-    const user = req.user.id;
-    const itemName = req.body.itemname;
-    const itemCategory = req.body.itemcategory;
-    const itemDescription = req.body.itemdescription;
-    const itemImage = req.body.itemimage;
+    // Get fields
+    const itemFields = {};
+    itemFields.users = req.user.id;
+    if (req.body.locname) itemFields.users = req.user.id;
 
-    const newItem = new Item({
-      itemname: itemName,
-      user: user,
-      itemcategory: itemCategory,
-      itemdescription: itemDescription,
-      itemimage: itemImage
+    const lowerLocation = req.body.locname.toLowerCase().replace(' ', '%20');
+    console.log(lowerLocation, itemFields);
+
+    Item.findOne({ locname: lowerLocation }).then((item) => {
+      if (item) {
+        Item.findOneAndUpdate(
+          { name: lowerLocation },
+          { $set: itemFields },
+          { new: true }
+        ).then((item) => res.json(item));
+      } else {
+        const locations = require('../../locations');
+        const lowerLocations = [];
+        for (let i = 0; i < locations.length; i++) {
+          lowerLocations.push(locations[i].toLowerCase().replace(' ', '%20'));
+          if (lowerLocation === lowerLocations[i]) {
+            console.log(lowerLocation, lowerLocations[i], itemFields);
+            const newItemFields = {};
+            newItemFields.users = req.user.id;
+            if (req.user) newItemFields.users = req.user.id;
+            if (req.body.locname) newItemFields.locname = lowerLocations[i];
+            console.log(newItemFields);
+
+            new Item(newItemFields)
+              .save()
+              .then((item) => res.json(item), console.log(item))
+              .catch((err) => console.log(err));
+          }
+        }
+      }
     });
-
-    Profile.findOne({ user: req.user._id }).then(profile => {
-      profile.items.push(newItem);
-      profile.save();
-    });
-
-    newItem.save().then(Item => res.json(Item));
   }
 );
+
+router.post('/:locname', (req, res) => {
+  const errors = {};
+  console.log('get locname');
+  const corrected = req.params.locname.replace(' ', '%20');
+  console.log(corrected);
+  Item.findOne({ locname: corrected }).then((item) => {
+    if (item) {
+      item.items.push(req.body);
+      item.save((err) => {
+        if (err) sendStatus(500);
+        res.sendStatus(200);
+      });
+    } else {
+      new Item(item)
+        .save()
+        .then((item) => res.json(item), console.log(item))
+        .catch((err) => console.log(err));
+    }
+  });
+});
 
 // @route   DELETE api/item/:id
 // @desc    Delete job item
@@ -70,9 +117,9 @@ router.delete(
   '/:id',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    Item.findOne({ user: req.user.id }).then(item => {
+    Item.findOne({ user: req.user.id }).then((item) => {
       Item.findById(req.params.id)
-        .then(item => {
+        .then((item) => {
           // Check for group owner
           if (item.user.toString() !== req.user.id) {
             return res
@@ -83,12 +130,12 @@ router.delete(
           // Delete
           item.remove().then(() => res.json({ success: true }));
         })
-        .catch(err =>
+        .catch((err) =>
           res.status(404).json({ jobitemnotfound: 'No group found' })
         );
     });
-    Profile.findOne({ user: req.user.id }).then(profile => {
-      profile.items.findById(req.params.id).then(item => {
+    Profile.findOne({ user: req.user.id }).then((profile) => {
+      profile.items.findById(req.params.id).then((item) => {
         item.remove();
       });
     });

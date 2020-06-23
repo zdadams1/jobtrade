@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
 import { addLocation } from '../../actions/profileActions';
 import { addUserToChat } from '../../actions/chatActions';
+import { addUserToMarket } from '../../actions/itemActions';
+import { addUserToJobs } from '../../actions/jobActions';
 import { createProfile } from '../../actions/profileActions';
 
 class AddLocation extends Component {
@@ -37,6 +39,8 @@ class AddLocation extends Component {
     console.log(locationData);
 
     this.props.addUserToChat(locationData);
+    this.props.addUserToMarket(locationData);
+    this.props.addUserToJobs(locationData);
     this.props.addLocation(locationData, this.props.history);
   }
 
@@ -92,5 +96,7 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   addLocation,
   createProfile,
-  addUserToChat
+  addUserToChat,
+  addUserToMarket,
+  addUserToJobs
 })(withRouter(AddLocation));

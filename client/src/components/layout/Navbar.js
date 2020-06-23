@@ -16,6 +16,7 @@ class Navbar extends Component {
   render() {
     const { isAuthenticated, user } = this.props.auth;
     const { profile } = this.props;
+    console.log(profile);
 
     let image;
 
@@ -73,7 +74,4 @@ const mapStateToProps = state => ({
   profile: state.profile
 });
 
-export default connect(
-  mapStateToProps,
-  { clearCurrentProfile }
-)(Navbar);
+export default connect(mapStateToProps, { clearCurrentProfile })(Navbar);

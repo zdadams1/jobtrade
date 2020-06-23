@@ -79,26 +79,6 @@ router.get('/:locname', (req, res) => {
   Chat.findOne({ locname: corrected }).then(chat => {
     console.log('get', chat);
     res.json(chat);
-    const io = req.app.get('socketio');
-    io.on('connection', socket => {
-      chat.messages
-        .limit(10)
-        .sort({ _id: 1 })
-        .toArray((err, res) => {
-          if (err) {
-            throw err;
-          }
-          socket.emit('output', res);
-        })
-        .catch(err => console.log(err));
-      socket.on('SEND_MESSAGE', data => {
-        let message = data.message;
-
-        chat.insertOne({ message: message }, () => {
-          io.emit('RECEIVE_MESSAGE', [data]);
-        });
-      });
-    });
   });
 });
 // @route   POST api/chat
@@ -160,5 +140,26 @@ router.post(
 // @route   POST api/chat/:location
 // @desc    send message in public chat
 // @access  Private
+
+router.post('/:locname', (req, res) => {
+  const errors = {};
+  console.log('get locname');
+  const corrected = req.params.locname.replace(' ', '%20');
+  console.log(corrected);
+  const io = req.app.get('socketio');
+  Chat.findOne({ locname: corrected }).then(chat => {
+    console.log('get', chat);
+    chat.messages.push(req.body);
+    chat.save(err => {
+      if (err) sendStatus(500);
+      io.on('connection', socket => {
+        socket.on('SEND_MESSAGE', function(data) {
+          io.emit('RECEIVE_MESSAGE', data);
+        });
+      });
+      res.sendStatus(200);
+    });
+  });
+});
 
 module.exports = router;

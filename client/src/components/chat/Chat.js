@@ -3,8 +3,10 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../common/Spinner';
-import { getChatByName } from '../../actions/chatActions';
+import { getChatByName, addMessageToChat } from '../../actions/chatActions';
 import io from 'socket.io-client';
+import TextFieldGroup from '../common/TextFieldGroup';
+import { getCurrentProfile } from '../../actions/profileActions';
 
 class Chat extends Component {
   constructor(props) {
@@ -12,17 +14,18 @@ class Chat extends Component {
     this.state = {
       chat: {},
       message: '',
-      messages: []
+      messages: [],
+      errors: {},
     };
     this.socket = io('localhost:5000');
     this.sendMessage = this.sendMessage.bind(this);
     this.onChange = this.onChange.bind(this);
     // this.onSubmit = this.onSubmit.bind(this);
-    this.socket.on('RECEIVE_MESSAGE', function(data) {
+    this.socket.on('RECEIVE_MESSAGE', function (data) {
       addMessage(data);
     });
 
-    const addMessage = data => {
+    const addMessage = (data) => {
       console.log(data);
       this.setState({ messages: [...this.state.messages, data] });
       console.log(this.state.messages);
@@ -32,22 +35,32 @@ class Chat extends Component {
   componentDidMount() {
     const corrected = this.props.match.params.locname.replace(' ', '%20');
     const url = `/api/chat/${corrected}`;
+
     axios
       .get(url)
-      .then(response => response.data)
-      .then(data => {
-        this.setState({ chat: data });
+      .then((response) => response.data)
+      .then((data) => {
+        console.log(data.messages);
+        this.setState({ chat: data, messages: data.messages });
         console.log(this.state.chat);
       });
+    this.props.getCurrentProfile();
   }
 
-  sendMessage = ev => {
+  sendMessage = (ev) => {
     ev.preventDefault();
-    const { user } = this.props.auth;
+    const { profile } = this.props.profile;
+    const { chat } = this.state;
+    const chatData = {
+      user: profile.handle,
+      locname: chat.locname,
+      message: this.state.message,
+    };
     this.socket.emit('SEND_MESSAGE', {
-      user: user.id,
-      message: this.state.message
+      user: profile.handle,
+      message: this.state.message,
     });
+    this.props.addMessageToChat(chatData);
     this.setState({ message: '' });
   };
 
@@ -56,9 +69,10 @@ class Chat extends Component {
   }
 
   render() {
-    const { chat, loading } = this.state;
-    const { user } = this.props.auth;
-    console.log(chat.locname);
+    const { chat, loading, errors } = this.state;
+    const { profile } = this.props;
+    console.log(chat.messages);
+    const messages = chat.messages;
 
     let chatContent;
 
@@ -73,23 +87,27 @@ class Chat extends Component {
               <div id='status'></div>
               <div id='chat'>
                 <div className='card'>
-                  <div className='messages'>
-                    {this.state.messages.map(message => {
+                  <div className='messages bg-primary'>
+                    {' '}
+                    {this.state.messages.map((message) => {
                       return (
-                        <div key={message.id}>
-                          {message.user}: {message.message}
+                        <div key={message._id}>
+                          {profile.handle}: {message.message}
                         </div>
                       );
                     })}
                   </div>
                 </div>
                 <br />
-                <textarea
-                  id='textarea'
+
+                <TextFieldGroup
+                  placeholder='message'
+                  name='message'
+                  value={this.state.message}
                   onChange={this.onChange}
-                  className='form-control'
-                  placeholder='Enter message...'
-                ></textarea>
+                  error={errors.message}
+                  info='Send message to chat.'
+                />
 
                 <button
                   onClick={this.sendMessage}
@@ -118,13 +136,20 @@ class Chat extends Component {
 
 Chat.propTypes = {
   getChatByName: PropTypes.func.isRequired,
+  addMessageToChat: PropTypes.func.isRequired,
   chat: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  profile: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   chat: state.chat,
-  auth: state.auth
+  auth: state.auth,
+  profile: state.profile,
 });
 
-export default connect(mapStateToProps, { getChatByName })(Chat);
+export default connect(mapStateToProps, {
+  getCurrentProfile,
+  getChatByName,
+  addMessageToChat,
+})(Chat);

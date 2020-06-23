@@ -8,6 +8,18 @@ import {
   DELETE_ITEM
 } from './types';
 
+export const addUserToMarket = locData => dispatch => {
+  axios
+    .post('/api/item', locData)
+
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
 // Get item
 export const getItem = id => dispatch => {
   dispatch(setItemLoading());
@@ -27,10 +39,10 @@ export const getItem = id => dispatch => {
     );
 };
 
-export const getMarket = () => dispatch => {
+export const getMarket = locname => dispatch => {
   dispatch(setItemLoading());
   axios
-    .get(`/api/item/`)
+    .get(`/api/item/${locname}`)
     .then(res =>
       dispatch({
         type: GET_ITEM,
@@ -47,8 +59,8 @@ export const getMarket = () => dispatch => {
 
 export const createItem = (itemData, history) => dispatch => {
   axios
-    .post(`/api/item/`, itemData)
-    .then(res => history.push(`/jobs/${itemData.locname}`))
+    .post(`/api/item/${itemData.locname}`, itemData)
+    .then(res => history.push(`/market/${itemData.locname}`))
     .catch(err =>
       dispatch({
         type: GET_ERRORS,

@@ -26,6 +26,8 @@ import Market from './components/market/Market.js';
 import Jobs from './components/jobs/Jobs.js';
 
 import './App.css';
+import NewJobForm from './components/jobs/NewJobForm';
+import NewItemForm from './components/market/NewItemForm';
 
 // Check for token
 if (localStorage.jwtToken) {
@@ -50,7 +52,7 @@ if (localStorage.jwtToken) {
 
 class App extends Component {
   render() {
-    const { chat } = this.props;
+    const { chat, item } = this.props;
     return (
       <Provider store={store}>
         <Router>
@@ -96,10 +98,25 @@ class App extends Component {
                 />
               </Switch>
               <Switch>
-                <Route exact path='/market/:locname' component={Market} />
+                <Route
+                  exact
+                  path='/market/:locname'
+                  item={item}
+                  component={Market}
+                />
+              </Switch>
+              <Switch>
+                <Route
+                  exact
+                  path='/market/:locname/new'
+                  component={NewItemForm}
+                />
               </Switch>
               <Switch>
                 <Route exact path='/jobs/:locname' component={Jobs} />
+              </Switch>
+              <Switch>
+                <Route exact path='/jobs/:locname/new' component={NewJobForm} />
               </Switch>
               <Route exact path='/not-found' component={NotFound} />
             </div>

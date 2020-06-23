@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
-
+import { getCurrentProfile } from '../../actions/profileActions';
 import { createItem } from '../../actions/itemActions';
 
 class NewItemForm extends Component {
@@ -21,6 +21,9 @@ class NewItemForm extends Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
+  componentDidMount() {
+    this.props.getCurrentProfile();
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
@@ -30,13 +33,15 @@ class NewItemForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+    const { profile } = this.props.profile;
 
     const itemData = {
       itemname: this.state.itemname,
       itemcategory: this.state.itemcategory,
       itemimage: this.state.itemimage,
       itemdescription: this.state.itemdescription,
-      itemprice: this.state.itemprice
+      itemprice: this.state.itemprice,
+      locname: profile.locname
     };
 
     this.props.createItem(itemData, this.props.history);
@@ -58,7 +63,7 @@ class NewItemForm extends Component {
         <div className='container'>
           <div className='row'>
             <div className='col-md-8 m-auto'>
-              <h1 className='display-4 text-center'>Create Your Profile</h1>
+              <h1 className='display-4 text-center'>Add Item</h1>
               <small className='d-block pb-3'>* = required fields</small>
               <form onSubmit={this.onSubmit}>
                 <TextFieldGroup
@@ -75,7 +80,7 @@ class NewItemForm extends Component {
                   onChange={this.onChange}
                   value={this.state.itemcategory}
                   error={errors.category}
-                  info='Pick a category'
+                  info='Pick a product category'
                 />
                 <TextFieldGroup
                   placeholder='image'
@@ -117,13 +122,15 @@ class NewItemForm extends Component {
 }
 
 NewItemForm.propTypes = {
-  errors: PropTypes.object.isRequired
+  errors: PropTypes.object.isRequired,
+  profile: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  errors: state.errors
+  errors: state.errors,
+  profile: state.profile
 });
 
-export default connect(mapStateToProps, { createItem })(
+export default connect(mapStateToProps, { createItem, getCurrentProfile })(
   withRouter(NewItemForm)
 );

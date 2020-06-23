@@ -29,6 +29,19 @@ export const getChatByName = locname => dispatch => {
     .catch(err => console.log(err));
 };
 
+// Add message to chat
+export const addMessageToChat = msgData => dispatch => {
+  axios
+    .post(`/api/chat/${msgData.locname}`, msgData)
+    .then(res =>
+      dispatch({
+        type: GET_CHAT,
+        payload: res.data
+      })
+    )
+    .catch(err => console.log(err));
+};
+
 // Profile loading
 export const setChatLoading = () => {
   return {

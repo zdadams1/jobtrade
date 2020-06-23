@@ -45,7 +45,7 @@ const ProfileSchema = new Schema({
         type: String,
         required: true
       },
-      category: {
+      itemcategory: {
         type: String,
         required: true
       },

@@ -8,7 +8,7 @@ class JobsFeed extends Component {
     if (!jobs) {
       return;
     }
-    return jobs.locname.map(job => <Job key={job._id} job={job} />);
+    return jobs.map(job => <Job key={job._id} job={job} />);
   }
 }
 

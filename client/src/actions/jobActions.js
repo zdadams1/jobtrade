@@ -6,74 +6,86 @@ import {
   GET_JOBS,
   CLEAR_ERRORS,
   JOB_LOADING,
-  DELETE_JOB
+  DELETE_JOB,
 } from './types';
 
 // Get item
-export const getJob = id => dispatch => {
+export const getJob = (id) => (dispatch) => {
   dispatch(setJobLoading());
   axios
     .get(`/api/job-items/${id}`)
-    .then(res =>
+    .then((res) =>
       dispatch({
         type: GET_JOB,
-        payload: res.data
+        payload: res.data,
       })
     )
-    .catch(err =>
+    .catch((err) =>
       dispatch({
         type: GET_JOB,
-        payload: null
+        payload: null,
       })
     );
 };
 
-export const getJobs = locname => dispatch => {
+export const addUserToJobs = (locData) => (dispatch) => {
+  axios
+    .post('/api/job-item', locData)
+
+    .catch((err) =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+      })
+    );
+};
+
+export const getJobs = (locname) => (dispatch) => {
   dispatch(setJobLoading());
   axios
     .get(`/api/job-items/${locname}`)
-    .then(res =>
+    .then((res) =>
       dispatch({
         type: GET_JOBS,
-        payload: res.data
+        payload: res.data,
       })
     )
-    .catch(err =>
+    .catch((err) =>
       dispatch({
         type: GET_JOBS,
-        payload: null
+        payload: null,
       })
     );
 };
 
-export const createJob = (jobData, history) => dispatch => {
+export const createJob = (jobData, history) => (dispatch) => {
   axios
-    .post(`/api/job-items/`, jobData)
-    .then(res => history.push(`/jobs/${jobData.locname}`))
-    .catch(err =>
+    .post(`/api/job-items/${jobData.locname}`, jobData)
+    .then((res) => history.push(`/jobs/${jobData.locname}`))
+    .catch((err) =>
       dispatch({
         type: GET_ERRORS,
-        payload: err.response.data
+        payload: err.response.data,
       })
     );
 };
 
 // Delete Request
-export const deleteJob = id => dispatch => {
+export const deleteJob = (id) => (dispatch) => {
   axios
     .delete(`/api/job-items/${id}`)
     .then(
-      res =>
+      (res) =>
         dispatch({
           type: DELETE_JOB,
-          payload: id
+          payload: id,
         }),
       window.location.reload()
     )
-    .catch(err =>
+    .catch((err) =>
       dispatch({
         type: GET_ERRORS,
-        payload: err.response.data
+        payload: err.response.data,
       })
     );
 };
@@ -81,13 +93,13 @@ export const deleteJob = id => dispatch => {
 // Profile loading
 export const setJobLoading = () => {
   return {
-    type: JOB_LOADING
+    type: JOB_LOADING,
   };
 };
 
 // Clear errors
 export const clearErrors = () => {
   return {
-    type: CLEAR_ERRORS
+    type: CLEAR_ERRORS,
   };
 };
